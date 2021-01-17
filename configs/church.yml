@@ -1,0 +1,11 @@
+data:
+    dataset: "LSUN"
+    category: "church_outdoor"
+    image_size: 256
+    channels: 3
+    logit_transform: false
+    uniform_dequantization: false
+    gaussian_dequantization: false
+    random_flip: true
+    rescaled: true
+    num_worker

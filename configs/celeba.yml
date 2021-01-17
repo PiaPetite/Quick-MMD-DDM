@@ -45,4 +45,7 @@ optim:
     weight_decay: 0.000
     optimizer: "Adam"
     lr: 0.000005
-    beta1: 0
+    beta1: 0.9
+    amsgrad: false
+    eps: 0.00000001
+    grad_clip: 1.0
