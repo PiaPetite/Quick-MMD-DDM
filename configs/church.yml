@@ -44,4 +44,9 @@ sampling:
     last_only: True
 
 optim:
-    weight_decay:
+    weight_decay: 0.000
+    optimizer: "Adam"
+    lr: 0.000001
+    beta1: 0.9
+    amsgrad: false
+    eps: 0.00000001
