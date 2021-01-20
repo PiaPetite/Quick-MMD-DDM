@@ -5,4 +5,19 @@ data:
     logit_transform: false
     uniform_dequantization: false
     gaussian_dequantization: false
-    random_flip: t
+    random_flip: true
+    rescaled: true
+    num_workers: 4
+
+model:
+    type: "simple"
+    in_channels: 3
+    out_ch: 3
+    ch: 128
+    ch_mult: [1, 2, 2, 2]
+    num_res_blocks: 2
+    attn_resolutions: [16, ]
+    dropout: 0.1
+    var_type: fixedlarge
+    ema_rate: 0.9999
+    ema: True
