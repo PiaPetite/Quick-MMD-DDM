@@ -33,4 +33,9 @@ class FFHQ(Dataset):
             key = f'{self.resolution}-{str(index).zfill(5)}'.encode('utf-8')
             img_bytes = txn.get(key)
 
-        buffer = BytesIO(img_byte
+        buffer = BytesIO(img_bytes)
+        img = Image.open(buffer)
+        img = self.transform(img)
+        target = 0
+
+        return img, target
