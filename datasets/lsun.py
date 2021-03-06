@@ -16,4 +16,15 @@ class LSUNClass(VisionDataset):
             root, transform=transform, target_transform=target_transform
         )
 
-        self.env = lmdb.o
+        self.env = lmdb.open(
+            root,
+            max_readers=1,
+            readonly=True,
+            lock=False,
+            readahead=False,
+            meminit=False,
+        )
+        with self.env.begin(write=False) as txn:
+            self.length = txn.stat()["entries"]
+        root_split = root.split("/")
+        cache_fi
