@@ -32,4 +32,14 @@ class LSUNClass(VisionDataset):
             self.keys = pickle.load(open(cache_file, "rb"))
         else:
             with self.env.begin(write=False) as txn:
-                self.keys = [key for key, _ in t
+                self.keys = [key for key, _ in txn.cursor()]
+            pickle.dump(self.keys, open(cache_file, "wb"))
+
+    def __getitem__(self, index):
+        img, target = None, None
+        env = self.env
+        with env.begin(write=False) as txn:
+            imgbuf = txn.get(self.keys[index])
+
+        buf = io.BytesIO()
+        b
