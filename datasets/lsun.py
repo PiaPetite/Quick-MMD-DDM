@@ -42,4 +42,16 @@ class LSUNClass(VisionDataset):
             imgbuf = txn.get(self.keys[index])
 
         buf = io.BytesIO()
-        b
+        buf.write(imgbuf)
+        buf.seek(0)
+        img = Image.open(buf).convert("RGB")
+
+        if self.transform is not None:
+            img = self.transform(img)
+
+        if self.target_transform is not None:
+            target = self.target_transform(target)
+
+        return img, target
+
+    def __
