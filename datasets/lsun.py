@@ -27,4 +27,9 @@ class LSUNClass(VisionDataset):
         with self.env.begin(write=False) as txn:
             self.length = txn.stat()["entries"]
         root_split = root.split("/")
-        cache_fi
+        cache_file = os.path.join("/".join(root_split[:-1]), f"_cache_{root_split[-1]}")
+        if os.path.isfile(cache_file):
+            self.keys = pickle.load(open(cache_file, "rb"))
+        else:
+            with self.env.begin(write=False) as txn:
+                self.keys = [key for key, _ in t
