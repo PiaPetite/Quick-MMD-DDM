@@ -54,4 +54,15 @@ class LSUNClass(VisionDataset):
 
         return img, target
 
-    def __
+    def __len__(self):
+        return self.length
+
+
+class LSUN(VisionDataset):
+    """
+    `LSUN <https://www.yf.io/p/lsun>`_ dataset.
+
+    Args:
+        root (string): Root directory for the database files.
+        classes (string or list): One of {'train', 'val', 'test'} or a list of
+            categories to load. e,g
