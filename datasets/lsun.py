@@ -88,4 +88,15 @@ class LSUN(VisionDataset):
         self.indices = []
         count = 0
         for db in self.dbs:
-           
+            count += len(db)
+            self.indices.append(count)
+
+        self.length = count
+
+    def _verify_classes(self, classes):
+        categories = [
+            "bedroom",
+            "bridge",
+            "church_outdoor",
+            "classroom",
+            "confere
