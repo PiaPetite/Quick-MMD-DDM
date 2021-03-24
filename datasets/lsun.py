@@ -99,4 +99,15 @@ class LSUN(VisionDataset):
             "bridge",
             "church_outdoor",
             "classroom",
-            "confere
+            "conference_room",
+            "dining_room",
+            "kitchen",
+            "living_room",
+            "restaurant",
+            "tower",
+        ]
+        dset_opts = ["train", "val", "test"]
+
+        try:
+            verify_str_arg(classes, "classes", dset_opts)
+            if classes == "test":
