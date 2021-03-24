@@ -78,4 +78,14 @@ class LSUN(VisionDataset):
         )
         self.classes = self._verify_classes(classes)
 
-        # for ea
+        # for each class, create an LSUNClassDataset
+        self.dbs = []
+        for c in self.classes:
+            self.dbs.append(
+                LSUNClass(root=root + "/" + c + "_lmdb", transform=transform)
+            )
+
+        self.indices = []
+        count = 0
+        for db in self.dbs:
+           
