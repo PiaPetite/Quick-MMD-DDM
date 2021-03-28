@@ -111,3 +111,10 @@ class LSUN(VisionDataset):
         try:
             verify_str_arg(classes, "classes", dset_opts)
             if classes == "test":
+                classes = [classes]
+            else:
+                classes = [c + "_" + classes for c in categories]
+        except ValueError:
+            if not isinstance(classes, Iterable):
+                msg = (
+                    "Expected type str or Iterable for argument class
