@@ -127,4 +127,9 @@ class LSUN(VisionDataset):
                 "Expected type str for elements in argument classes, "
                 "but got type {}."
             )
-         
+            for c in classes:
+                verify_str_arg(c, custom_msg=msg_fmtstr.format(type(c)))
+                c_short = c.split("_")
+                category, dset_opt = "_".join(c_short[:-1]), c_short[-1]
+
+                msg_fmtstr = "Unknown value '{}' for {}. Valid values are {{{}
