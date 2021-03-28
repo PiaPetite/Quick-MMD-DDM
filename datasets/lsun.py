@@ -117,4 +117,14 @@ class LSUN(VisionDataset):
         except ValueError:
             if not isinstance(classes, Iterable):
                 msg = (
-                    "Expected type str or Iterable for argument class
+                    "Expected type str or Iterable for argument classes, "
+                    "but got type {}."
+                )
+                raise ValueError(msg.format(type(classes)))
+
+            classes = list(classes)
+            msg_fmtstr = (
+                "Expected type str for elements in argument classes, "
+                "but got type {}."
+            )
+         
