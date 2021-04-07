@@ -138,4 +138,15 @@ class LSUN(VisionDataset):
                 )
                 verify_str_arg(category, valid_values=categories, custom_msg=msg)
 
-                msg = msg_fmtstr.format(dset_opt, "pos
+                msg = msg_fmtstr.format(dset_opt, "postfix", iterable_to_str(dset_opts))
+                verify_str_arg(dset_opt, valid_values=dset_opts, custom_msg=msg)
+
+        return classes
+
+    def __getitem__(self, index):
+        """
+        Args:
+            index (int): Index
+
+        Returns:
+            tuple: Tuple (image, target) where
