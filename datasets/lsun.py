@@ -149,4 +149,17 @@ class LSUN(VisionDataset):
             index (int): Index
 
         Returns:
-            tuple: Tuple (image, target) where
+            tuple: Tuple (image, target) where target is the index of the target category.
+        """
+        target = 0
+        sub = 0
+        for ind in self.indices:
+            if index < ind:
+                break
+            target += 1
+            sub = ind
+
+        db = self.dbs[target]
+        index = index - sub
+
+        if self.ta
