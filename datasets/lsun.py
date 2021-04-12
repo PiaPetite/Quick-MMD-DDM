@@ -162,4 +162,14 @@ class LSUN(VisionDataset):
         db = self.dbs[target]
         index = index - sub
 
-        if self.ta
+        if self.target_transform is not None:
+            target = self.target_transform(target)
+
+        img, _ = db[index]
+        return img, target
+
+    def __len__(self):
+        return self.length
+
+    def extra_repr(self):
+        return "Classes: {classes}".format(**self.__dict__)
