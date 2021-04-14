@@ -17,4 +17,13 @@ class VisionDataset(data.Dataset):
             raise ValueError("Only transforms or transform/target_transform can "
                              "be passed as argument")
 
-        # 
+        # for backwards-compatibility
+        self.transform = transform
+        self.target_transform = target_transform
+
+        if has_separate_transform:
+            transforms = StandardTransform(transform, target_transform)
+        self.transforms = transforms
+
+    def __getitem__(self, index):
+       
