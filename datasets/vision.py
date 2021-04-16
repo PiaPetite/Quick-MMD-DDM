@@ -26,4 +26,13 @@ class VisionDataset(data.Dataset):
         self.transforms = transforms
 
     def __getitem__(self, index):
-       
+        raise NotImplementedError
+
+    def __len__(self):
+        raise NotImplementedError
+
+    def __repr__(self):
+        head = "Dataset " + self.__class__.__name__
+        body = ["Number of datapoints: {}".format(self.__len__())]
+        if self.root is not None:
+            body.append("Root location: {}"
