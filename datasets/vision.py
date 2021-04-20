@@ -35,4 +35,9 @@ class VisionDataset(data.Dataset):
         head = "Dataset " + self.__class__.__name__
         body = ["Number of datapoints: {}".format(self.__len__())]
         if self.root is not None:
-            body.append("Root location: {}"
+            body.append("Root location: {}".format(self.root))
+        body += self.extra_repr().splitlines()
+        if hasattr(self, 'transform') and self.transform is not None:
+            body += self._format_transform_repr(self.transform,
+                                                "Transforms: ")
+        if hasattr(self, 'target_transfor
