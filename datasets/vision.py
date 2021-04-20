@@ -40,4 +40,10 @@ class VisionDataset(data.Dataset):
         if hasattr(self, 'transform') and self.transform is not None:
             body += self._format_transform_repr(self.transform,
                                                 "Transforms: ")
-        if hasattr(self, 'target_transfor
+        if hasattr(self, 'target_transform') and self.target_transform is not None:
+            body += self._format_transform_repr(self.target_transform,
+                                                "Target transforms: ")
+        lines = [head] + [" " * self._repr_indent + line for line in body]
+        return '\n'.join(lines)
+
+    def _format_t
