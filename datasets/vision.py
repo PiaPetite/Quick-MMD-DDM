@@ -46,4 +46,13 @@ class VisionDataset(data.Dataset):
         lines = [head] + [" " * self._repr_indent + line for line in body]
         return '\n'.join(lines)
 
-    def _format_t
+    def _format_transform_repr(self, transform, head):
+        lines = transform.__repr__().splitlines()
+        return (["{}{}".format(head, lines[0])] +
+                ["{}{}".format(" " * len(head), line) for line in lines[1:]])
+
+    def extra_repr(self):
+        return ""
+
+
+class 
