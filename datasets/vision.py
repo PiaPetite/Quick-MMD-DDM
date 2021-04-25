@@ -63,4 +63,11 @@ class StandardTransform(object):
     def __call__(self, input, target):
         if self.transform is not None:
             input = self.transform(input)
-        if self.target_transform is not No
+        if self.target_transform is not None:
+            target = self.target_transform(target)
+        return input, target
+
+    def _format_transform_repr(self, transform, head):
+        lines = transform.__repr__().splitlines()
+        return (["{}{}".format(head, lines[0])] +
+                ["{}{}".format(" " * len(head
