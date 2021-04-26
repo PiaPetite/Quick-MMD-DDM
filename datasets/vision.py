@@ -77,4 +77,8 @@ class StandardTransform(object):
         if self.transform is not None:
             body += self._format_transform_repr(self.transform,
                                                 "Transform: ")
-        if self.t
+        if self.target_transform is not None:
+            body += self._format_transform_repr(self.target_transform,
+                                                "Target transform: ")
+
+        return '\n'.join(body)
