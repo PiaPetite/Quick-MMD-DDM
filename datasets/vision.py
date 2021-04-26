@@ -70,4 +70,11 @@ class StandardTransform(object):
     def _format_transform_repr(self, transform, head):
         lines = transform.__repr__().splitlines()
         return (["{}{}".format(head, lines[0])] +
-                ["{}{}".format(" " * len(head
+                ["{}{}".format(" " * len(head), line) for line in lines[1:]])
+
+    def __repr__(self):
+        body = [self.__class__.__name__]
+        if self.transform is not None:
+            body += self._format_transform_repr(self.transform,
+                                                "Transform: ")
+        if self.t
