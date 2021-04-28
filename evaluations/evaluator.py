@@ -211,3 +211,312 @@ class ManifoldEstimator:
         self,
         session,
         row_batch_size=10000,
+        col_batch_size=10000,
+        nhood_sizes=(3,),
+        clamp_to_percentile=None,
+        eps=1e-5,
+    ):
+        """
+        Estimate the manifold of given feature vectors.
+        :param session: the TensorFlow session.
+        :param row_batch_size: row batch size to compute pairwise distances
+                               (parameter to trade-off between memory usage and performance).
+        :param col_batch_size: column batch size to compute pairwise distances.
+        :param nhood_sizes: number of neighbors used to estimate the manifold.
+        :param clamp_to_percentile: prune hyperspheres that have radius larger than
+                                    the given percentile.
+        :param eps: small number for numerical stability.
+        """
+        self.distance_block = DistanceBlock(session)
+        self.row_batch_size = row_batch_size
+        self.col_batch_size = col_batch_size
+        self.nhood_sizes = nhood_sizes
+        self.num_nhoods = len(nhood_sizes)
+        self.clamp_to_percentile = clamp_to_percentile
+        self.eps = eps
+
+    def warmup(self):
+        feats, radii = (
+            np.zeros([1, 2048], dtype=np.float32),
+            np.zeros([1, 1], dtype=np.float32),
+        )
+        self.evaluate_pr(feats, radii, feats, radii)
+
+    def manifold_radii(self, features: np.ndarray) -> np.ndarray:
+        num_images = len(features)
+
+        # Estimate manifold of features by calculating distances to k-NN of each sample.
+        radii = np.zeros([num_images, self.num_nhoods], dtype=np.float32)
+        distance_batch = np.zeros([self.row_batch_size, num_images], dtype=np.float32)
+        seq = np.arange(max(self.nhood_sizes) + 1, dtype=np.int32)
+
+        for begin1 in range(0, num_images, self.row_batch_size):
+            end1 = min(begin1 + self.row_batch_size, num_images)
+            row_batch = features[begin1:end1]
+
+            for begin2 in range(0, num_images, self.col_batch_size):
+                end2 = min(begin2 + self.col_batch_size, num_images)
+                col_batch = features[begin2:end2]
+
+                # Compute distances between batches.
+                distance_batch[
+                    0 : end1 - begin1, begin2:end2
+                ] = self.distance_block.pairwise_distances(row_batch, col_batch)
+
+            # Find the k-nearest neighbor from the current batch.
+            radii[begin1:end1, :] = np.concatenate(
+                [
+                    x[:, self.nhood_sizes]
+                    for x in _numpy_partition(distance_batch[0 : end1 - begin1, :], seq, axis=1)
+                ],
+                axis=0,
+            )
+
+        if self.clamp_to_percentile is not None:
+            max_distances = np.percentile(radii, self.clamp_to_percentile, axis=0)
+            radii[radii > max_distances] = 0
+        return radii
+
+    def evaluate(self, features: np.ndarray, radii: np.ndarray, eval_features: np.ndarray):
+        """
+        Evaluate if new feature vectors are at the manifold.
+        """
+        num_eval_images = eval_features.shape[0]
+        num_ref_images = radii.shape[0]
+        distance_batch = np.zeros([self.row_batch_size, num_ref_images], dtype=np.float32)
+        batch_predictions = np.zeros([num_eval_images, self.num_nhoods], dtype=np.int32)
+        max_realism_score = np.zeros([num_eval_images], dtype=np.float32)
+        nearest_indices = np.zeros([num_eval_images], dtype=np.int32)
+
+        for begin1 in range(0, num_eval_images, self.row_batch_size):
+            end1 = min(begin1 + self.row_batch_size, num_eval_images)
+            feature_batch = eval_features[begin1:end1]
+
+            for begin2 in range(0, num_ref_images, self.col_batch_size):
+                end2 = min(begin2 + self.col_batch_size, num_ref_images)
+                ref_batch = features[begin2:end2]
+
+                distance_batch[
+                    0 : end1 - begin1, begin2:end2
+                ] = self.distance_block.pairwise_distances(feature_batch, ref_batch)
+
+            # From the minibatch of new feature vectors, determine if they are in the estimated manifold.
+            # If a feature vector is inside a hypersphere of some reference sample, then
+            # the new sample lies at the estimated manifold.
+            # The radii of the hyperspheres are determined from distances of neighborhood size k.
+            samples_in_manifold = distance_batch[0 : end1 - begin1, :, None] <= radii
+            batch_predictions[begin1:end1] = np.any(samples_in_manifold, axis=1).astype(np.int32)
+
+            max_realism_score[begin1:end1] = np.max(
+                radii[:, 0] / (distance_batch[0 : end1 - begin1, :] + self.eps), axis=1
+            )
+            nearest_indices[begin1:end1] = np.argmin(distance_batch[0 : end1 - begin1, :], axis=1)
+
+        return {
+            "fraction": float(np.mean(batch_predictions)),
+            "batch_predictions": batch_predictions,
+            "max_realisim_score": max_realism_score,
+            "nearest_indices": nearest_indices,
+        }
+
+    def evaluate_pr(
+        self,
+        features_1: np.ndarray,
+        radii_1: np.ndarray,
+        features_2: np.ndarray,
+        radii_2: np.ndarray,
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        Evaluate precision and recall efficiently.
+        :param features_1: [N1 x D] feature vectors for reference batch.
+        :param radii_1: [N1 x K1] radii for reference vectors.
+        :param features_2: [N2 x D] feature vectors for the other batch.
+        :param radii_2: [N x K2] radii for other vectors.
+        :return: a tuple of arrays for (precision, recall):
+                 - precision: an np.ndarray of length K1
+                 - recall: an np.ndarray of length K2
+        """
+        features_1_status = np.zeros([len(features_1), radii_2.shape[1]], dtype=np.bool)
+        features_2_status = np.zeros([len(features_2), radii_1.shape[1]], dtype=np.bool)
+        for begin_1 in range(0, len(features_1), self.row_batch_size):
+            end_1 = begin_1 + self.row_batch_size
+            batch_1 = features_1[begin_1:end_1]
+            for begin_2 in range(0, len(features_2), self.col_batch_size):
+                end_2 = begin_2 + self.col_batch_size
+                batch_2 = features_2[begin_2:end_2]
+                batch_1_in, batch_2_in = self.distance_block.less_thans(
+                    batch_1, radii_1[begin_1:end_1], batch_2, radii_2[begin_2:end_2]
+                )
+                features_1_status[begin_1:end_1] |= batch_1_in
+                features_2_status[begin_2:end_2] |= batch_2_in
+        return (
+            np.mean(features_2_status.astype(np.float64), axis=0),
+            np.mean(features_1_status.astype(np.float64), axis=0),
+        )
+
+
+class DistanceBlock:
+    """
+    Calculate pairwise distances between vectors.
+    Adapted from https://github.com/kynkaat/improved-precision-and-recall-metric/blob/f60f25e5ad933a79135c783fcda53de30f42c9b9/precision_recall.py#L34
+    """
+
+    def __init__(self, session):
+        self.session = session
+
+        # Initialize TF graph to calculate pairwise distances.
+        with session.graph.as_default():
+            self._features_batch1 = tf.placeholder(tf.float32, shape=[None, None])
+            self._features_batch2 = tf.placeholder(tf.float32, shape=[None, None])
+            distance_block_16 = _batch_pairwise_distances(
+                tf.cast(self._features_batch1, tf.float16),
+                tf.cast(self._features_batch2, tf.float16),
+            )
+            self.distance_block = tf.cond(
+                tf.reduce_all(tf.math.is_finite(distance_block_16)),
+                lambda: tf.cast(distance_block_16, tf.float32),
+                lambda: _batch_pairwise_distances(self._features_batch1, self._features_batch2),
+            )
+
+            # Extra logic for less thans.
+            self._radii1 = tf.placeholder(tf.float32, shape=[None, None])
+            self._radii2 = tf.placeholder(tf.float32, shape=[None, None])
+            dist32 = tf.cast(self.distance_block, tf.float32)[..., None]
+            self._batch_1_in = tf.math.reduce_any(dist32 <= self._radii2, axis=1)
+            self._batch_2_in = tf.math.reduce_any(dist32 <= self._radii1[:, None], axis=0)
+
+    def pairwise_distances(self, U, V):
+        """
+        Evaluate pairwise distances between two batches of feature vectors.
+        """
+        return self.session.run(
+            self.distance_block,
+            feed_dict={self._features_batch1: U, self._features_batch2: V},
+        )
+
+    def less_thans(self, batch_1, radii_1, batch_2, radii_2):
+        return self.session.run(
+            [self._batch_1_in, self._batch_2_in],
+            feed_dict={
+                self._features_batch1: batch_1,
+                self._features_batch2: batch_2,
+                self._radii1: radii_1,
+                self._radii2: radii_2,
+            },
+        )
+
+
+def _batch_pairwise_distances(U, V):
+    """
+    Compute pairwise distances between two batches of feature vectors.
+    """
+    with tf.variable_scope("pairwise_dist_block"):
+        # Squared norms of each row in U and V.
+        norm_u = tf.reduce_sum(tf.square(U), 1)
+        norm_v = tf.reduce_sum(tf.square(V), 1)
+
+        # norm_u as a column and norm_v as a row vectors.
+        norm_u = tf.reshape(norm_u, [-1, 1])
+        norm_v = tf.reshape(norm_v, [1, -1])
+
+        # Pairwise squared Euclidean distances.
+        D = tf.maximum(norm_u - 2 * tf.matmul(U, V, False, True) + norm_v, 0.0)
+
+    return D
+
+
+class NpzArrayReader(ABC):
+    @abstractmethod
+    def read_batch(self, batch_size: int) -> Optional[np.ndarray]:
+        pass
+
+    @abstractmethod
+    def remaining(self) -> int:
+        pass
+
+    def read_batches(self, batch_size: int) -> Iterable[np.ndarray]:
+        def gen_fn():
+            while True:
+                batch = self.read_batch(batch_size)
+                if batch is None:
+                    break
+                yield batch
+
+        rem = self.remaining()
+        num_batches = rem // batch_size + int(rem % batch_size != 0)
+        return BatchIterator(gen_fn, num_batches)
+
+
+class BatchIterator:
+    def __init__(self, gen_fn, length):
+        self.gen_fn = gen_fn
+        self.length = length
+
+    def __len__(self):
+        return self.length
+
+    def __iter__(self):
+        return self.gen_fn()
+
+
+class StreamingNpzArrayReader(NpzArrayReader):
+    def __init__(self, arr_f, shape, dtype):
+        self.arr_f = arr_f
+        self.shape = shape
+        self.dtype = dtype
+        self.idx = 0
+
+    def read_batch(self, batch_size: int) -> Optional[np.ndarray]:
+        if self.idx >= self.shape[0]:
+            return None
+
+        bs = min(batch_size, self.shape[0] - self.idx)
+        self.idx += bs
+
+        if self.dtype.itemsize == 0:
+            return np.ndarray([bs, *self.shape[1:]], dtype=self.dtype)
+
+        read_count = bs * np.prod(self.shape[1:])
+        read_size = int(read_count * self.dtype.itemsize)
+        data = _read_bytes(self.arr_f, read_size, "array data")
+        return np.frombuffer(data, dtype=self.dtype).reshape([bs, *self.shape[1:]])
+
+    def remaining(self) -> int:
+        return max(0, self.shape[0] - self.idx)
+
+
+class MemoryNpzArrayReader(NpzArrayReader):
+    def __init__(self, arr):
+        self.arr = arr
+        self.idx = 0
+
+    @classmethod
+    def load(cls, path: str, arr_name: str):
+        with open(path, "rb") as f:
+            arr = np.load(f)[arr_name]
+        return cls(arr)
+
+    def read_batch(self, batch_size: int) -> Optional[np.ndarray]:
+        if self.idx >= self.arr.shape[0]:
+            return None
+
+        res = self.arr[self.idx : self.idx + batch_size]
+        self.idx += batch_size
+        return res
+
+    def remaining(self) -> int:
+        return max(0, self.arr.shape[0] - self.idx)
+
+
+@contextmanager
+def open_npz_array(path: str, arr_name: str) -> NpzArrayReader:
+    with _open_npy_file(path, arr_name) as arr_f:
+        version = np.lib.format.read_magic(arr_f)
+        if version == (1, 0):
+            header = np.lib.format.read_array_header_1_0(arr_f)
+        elif version == (2, 0):
+            header = np.lib.format.read_array_header_2_0(arr_f)
+        else:
+            yield MemoryNpzArrayReader.load(path, arr_name)
+            return
+        shape, fortran, dtype = header
