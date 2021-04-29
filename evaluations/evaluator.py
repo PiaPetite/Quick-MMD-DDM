@@ -520,3 +520,128 @@ def open_npz_array(path: str, arr_name: str) -> NpzArrayReader:
             yield MemoryNpzArrayReader.load(path, arr_name)
             return
         shape, fortran, dtype = header
+        if fortran or dtype.hasobject:
+            yield MemoryNpzArrayReader.load(path, arr_name)
+        else:
+            yield StreamingNpzArrayReader(arr_f, shape, dtype)
+
+
+def _read_bytes(fp, size, error_template="ran out of data"):
+    """
+    Copied from: https://github.com/numpy/numpy/blob/fb215c76967739268de71aa4bda55dd1b062bc2e/numpy/lib/format.py#L788-L886
+    Read from file-like object until size bytes are read.
+    Raises ValueError if not EOF is encountered before size bytes are read.
+    Non-blocking objects only supported if they derive from io objects.
+    Required as e.g. ZipExtFile in python 2.6 can return less data than
+    requested.
+    """
+    data = bytes()
+    while True:
+        # io files (default in python3) return None or raise on
+        # would-block, python2 file will truncate, probably nothing can be
+        # done about that.  note that regular files can't be non-blocking
+        try:
+            r = fp.read(size - len(data))
+            data += r
+            if len(r) == 0 or len(data) == size:
+                break
+        except io.BlockingIOError:
+            pass
+    if len(data) != size:
+        msg = "EOF: reading %s, expected %d bytes got %d"
+        raise ValueError(msg % (error_template, size, len(data)))
+    else:
+        return data
+
+
+@contextmanager
+def _open_npy_file(path: str, arr_name: str):
+    with open(path, "rb") as f:
+        with zipfile.ZipFile(f, "r") as zip_f:
+            if f"{arr_name}.npy" not in zip_f.namelist():
+                raise ValueError(f"missing {arr_name} in npz file")
+            with zip_f.open(f"{arr_name}.npy", "r") as arr_f:
+                yield arr_f
+
+
+def _download_inception_model():
+    if os.path.exists(INCEPTION_V3_PATH):
+        return
+    print("downloading InceptionV3 model...")
+    with requests.get(INCEPTION_V3_URL, stream=True) as r:
+        r.raise_for_status()
+        tmp_path = INCEPTION_V3_PATH + ".tmp"
+        with open(tmp_path, "wb") as f:
+            for chunk in tqdm(r.iter_content(chunk_size=8192)):
+                f.write(chunk)
+        os.rename(tmp_path, INCEPTION_V3_PATH)
+
+
+def _create_feature_graph(input_batch):
+    _download_inception_model()
+    prefix = f"{random.randrange(2**32)}_{random.randrange(2**32)}"
+    with open(INCEPTION_V3_PATH, "rb") as f:
+        graph_def = tf.GraphDef()
+        graph_def.ParseFromString(f.read())
+    pool3, spatial = tf.import_graph_def(
+        graph_def,
+        input_map={f"ExpandDims:0": input_batch},
+        return_elements=[FID_POOL_NAME, FID_SPATIAL_NAME],
+        name=prefix,
+    )
+    _update_shapes(pool3)
+    spatial = spatial[..., :7]
+    return pool3, spatial
+
+
+def _create_softmax_graph(input_batch):
+    _download_inception_model()
+    prefix = f"{random.randrange(2**32)}_{random.randrange(2**32)}"
+    with open(INCEPTION_V3_PATH, "rb") as f:
+        graph_def = tf.GraphDef()
+        graph_def.ParseFromString(f.read())
+    (matmul,) = tf.import_graph_def(
+        graph_def, return_elements=[f"softmax/logits/MatMul"], name=prefix
+    )
+    w = matmul.inputs[1]
+    logits = tf.matmul(input_batch, w)
+    return tf.nn.softmax(logits)
+
+
+def _update_shapes(pool3):
+    # https://github.com/bioinf-jku/TTUR/blob/73ab375cdf952a12686d9aa7978567771084da42/fid.py#L50-L63
+    ops = pool3.graph.get_operations()
+    for op in ops:
+        for o in op.outputs:
+            shape = o.get_shape()
+            if shape._dims is not None:  # pylint: disable=protected-access
+                # shape = [s.value for s in shape] TF 1.x
+                shape = [s for s in shape]  # TF 2.x
+                new_shape = []
+                for j, s in enumerate(shape):
+                    if s == 1 and j == 0:
+                        new_shape.append(None)
+                    else:
+                        new_shape.append(s)
+                o.__dict__["_shape_val"] = tf.TensorShape(new_shape)
+    return pool3
+
+
+def _numpy_partition(arr, kth, **kwargs):
+    num_workers = min(cpu_count(), len(arr))
+    chunk_size = len(arr) // num_workers
+    extra = len(arr) % num_workers
+
+    start_idx = 0
+    batches = []
+    for i in range(num_workers):
+        size = chunk_size + (1 if i < extra else 0)
+        batches.append(arr[start_idx : start_idx + size])
+        start_idx += size
+
+    with ThreadPool(num_workers) as pool:
+        return list(pool.map(partial(np.partition, kth=kth, **kwargs), batches))
+
+
+if __name__ == "__main__":
+    main()
