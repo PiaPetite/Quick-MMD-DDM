@@ -22,4 +22,10 @@ CKPT_MAP = {
     "lsun_church": "diffusion_lsun_church_model/model-4432000.ckpt",
     "ema_lsun_church": "ema_diffusion_lsun_church_model/model-4432000.ckpt",
 }
-MD5_MAP =
+MD5_MAP = {
+    "cifar10": "82ed3067fd1002f5cf4c339fb80c4669",
+    "ema_cifar10": "1fa350b952534ae442b1d5235cce5cd3",
+    "lsun_bedroom": "f70280ac0e08b8e696f42cb8e948ff1c",
+    "ema_lsun_bedroom": "1921fa46b66a3665e450e42f36c2720f",
+    "lsun_cat": "bbee0e7c3d7abfb6e2539eaf2fb9987b",
+    "ema_lsun_cat
