@@ -10,4 +10,10 @@ URL_MAP = {
     "lsun_cat": "https://heibox.uni-heidelberg.de/f/fac870bd988348eab88e/?dl=1",
     "ema_lsun_cat": "https://heibox.uni-heidelberg.de/f/0701aac3aa69457bbe34/?dl=1",
     "lsun_church": "https://heibox.uni-heidelberg.de/f/2711a6f712e34b06b9d8/?dl=1",
-    "ema_lsun_church": "https://heibox.uni-heidelberg.de/f/44ccb50e
+    "ema_lsun_church": "https://heibox.uni-heidelberg.de/f/44ccb50ef3c6436db52e/?dl=1",
+}
+CKPT_MAP = {
+    "cifar10": "diffusion_cifar10_model/model-790000.ckpt",
+    "ema_cifar10": "ema_diffusion_cifar10_model/model-790000.ckpt",
+    "lsun_bedroom": "diffusion_lsun_bedroom_model/model-2388000.ckpt",
+    "ema_lsun_bedroom": "ema_diffusion_lsun_bedroom_mo
