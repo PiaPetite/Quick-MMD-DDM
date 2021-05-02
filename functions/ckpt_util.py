@@ -28,4 +28,12 @@ MD5_MAP = {
     "lsun_bedroom": "f70280ac0e08b8e696f42cb8e948ff1c",
     "ema_lsun_bedroom": "1921fa46b66a3665e450e42f36c2720f",
     "lsun_cat": "bbee0e7c3d7abfb6e2539eaf2fb9987b",
-    "ema_lsun_cat
+    "ema_lsun_cat": "646f23f4821f2459b8bafc57fd824558",
+    "lsun_church": "eb619b8a5ab95ef80f94ce8a5488dae3",
+    "ema_lsun_church": "fdc68a23938c2397caba4a260bc2445f",
+}
+
+
+def download(url, local_path, chunk_size=1024):
+    os.makedirs(os.path.split(local_path)[0], exist_ok=True)
+    with requests.get
