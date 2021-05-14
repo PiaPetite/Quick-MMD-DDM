@@ -68,4 +68,5 @@ def get_ckpt_path(name, root=None, check=False):
         print("Downloading {} model from {} to {}".format(name, URL_MAP[name], path))
         download(URL_MAP[name], path)
         md5 = md5_hash(path)
-       
+        assert md5 == MD5_MAP[name], md5
+    return path
