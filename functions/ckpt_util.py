@@ -40,4 +40,17 @@ def download(url, local_path, chunk_size=1024):
         total_size = int(r.headers.get("content-length", 0))
         with tqdm(total=total_size, unit="B", unit_scale=True) as pbar:
             with open(local_path, "wb") as f:
-                for data in r.iter_content(chunk_size=chunk_size)
+                for data in r.iter_content(chunk_size=chunk_size):
+                    if data:
+                        f.write(data)
+                        pbar.update(chunk_size)
+
+
+def md5_hash(path):
+    with open(path, "rb") as f:
+        content = f.read()
+    return hashlib.md5(content).hexdigest()
+
+
+def get_ckpt_path(name, root=None, check=False):
+    if 'church_outdoo
