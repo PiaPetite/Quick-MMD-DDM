@@ -53,4 +53,12 @@ def md5_hash(path):
 
 
 def get_ckpt_path(name, root=None, check=False):
-    if 'church_outdoo
+    if 'church_outdoor' in name:
+        name = name.replace('church_outdoor', 'church')
+    assert name in URL_MAP
+    # Modify the path when necessary
+    cachedir = os.environ.get("XDG_CACHE_HOME", os.path.expanduser("username/.cache"))
+    root = (
+        root
+        if root is not None
+        else os.path.join(cachedir, "
