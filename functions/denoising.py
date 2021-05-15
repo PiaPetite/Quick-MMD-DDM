@@ -23,4 +23,12 @@ def generalized_steps_diff(x, seq, model, b, **kwargs):
     """
     
     n = x.size(0)
-    seq_next = [-1] + list(seq[:
+    seq_next = [-1] + list(seq[:-1])
+    x0_preds = []
+    xs = [x]
+    for i, j in zip(reversed(seq), reversed(seq_next)):
+        t = (torch.ones(n) * i).to(x.device) #shape (n)
+        next_t = (torch.ones(n) * j).to(x.device)
+        at = compute_alpha(b, t.long())
+        at_next = compute_alpha(b, next_t.long())
+     
