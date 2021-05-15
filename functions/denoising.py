@@ -17,4 +17,10 @@ def custom(module):
 def generalized_steps_diff(x, seq, model, b, **kwargs):
 
     """
-    Functi
+    Function that samples from the model using the generalized DDPM sampling scheme. It takes as input the initial noise x
+    and the sequence of time steps to sample from. The seq is unique for each image in the batch.
+    seq has shape (seq_len)
+    """
+    
+    n = x.size(0)
+    seq_next = [-1] + list(seq[:
