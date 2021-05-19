@@ -39,4 +39,13 @@ def generalized_steps_diff(x, seq, model, b, **kwargs):
             kwargs.get("eta", 0) * ((1 - at / at_next) * (1 - at_next) / (1 - at)).sqrt()
         )
         c2 = ((1 - at_next) - c1 ** 2).sqrt()
-        xt_next = at_
+        xt_next = at_next.sqrt() * x0_t + c1 * torch.randn_like(x) + c2 * et
+        xs.append(xt_next)
+
+    return xs, x0_preds
+
+def generalized_steps_gp(x, seq, model, b, **kwargs):
+
+    """
+    Function that samples from the model using the generalized DDPM sampling scheme. It takes as input the initial noise x
+    and the s
