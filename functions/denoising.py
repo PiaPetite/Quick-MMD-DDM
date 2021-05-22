@@ -62,4 +62,10 @@ def generalized_steps_gp(x, seq, model, b, **kwargs):
         at = compute_alpha(b, t.long())
         at_next = compute_alpha(b, next_t.long())
         xt = xs[-1].requires_grad_()
-     
+        et = checkpoint.checkpoint(custom(model), xt, t)
+        x0_t = (xt - et * (1 - at).sqrt()) / at.sqrt()
+        x0_preds.append(x0_t)
+        c1 = (
+            kwargs.get("eta", 0) * ((1 - at / at_next) * (1 - at_next) / (1 - at)).sqrt()
+        )
+        c2 = ((1 - at_next) - c1 ** 2).s
