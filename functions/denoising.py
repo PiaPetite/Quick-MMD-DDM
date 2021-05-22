@@ -57,4 +57,9 @@ def generalized_steps_gp(x, seq, model, b, **kwargs):
     x0_preds = []
     xs = [x]
     for i, j in zip(reversed(seq), reversed(seq_next)):
-       
+        t = (torch.ones(n) * i).to(x.device).requires_grad_() #shape (n)
+        next_t = (torch.ones(n) * j).to(x.device)
+        at = compute_alpha(b, t.long())
+        at_next = compute_alpha(b, next_t.long())
+        xt = xs[-1].requires_grad_()
+     
