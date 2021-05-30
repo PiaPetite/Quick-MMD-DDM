@@ -77,4 +77,13 @@ def generalized_steps_gp(x, seq, model, b, **kwargs):
 def generalized_steps(x, seq, model, b, **kwargs):
 
     """
-    Function that samples from the model using the generalized DDPM sampling scheme. It takes as inpu
+    Function that samples from the model using the generalized DDPM sampling scheme. It takes as input the initial noise x
+    and the sequence of time steps to sample from. The seq is unique for each image in the batch.
+    seq has shape (seq_len)
+    """
+    with torch.no_grad():
+        n = x.size(0)
+        seq_next = [-1] + list(seq[:-1])
+        x0_preds = []
+        xs = [x]
+        fo
