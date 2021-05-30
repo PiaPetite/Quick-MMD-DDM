@@ -86,4 +86,9 @@ def generalized_steps(x, seq, model, b, **kwargs):
         seq_next = [-1] + list(seq[:-1])
         x0_preds = []
         xs = [x]
-        fo
+        for i, j in zip(reversed(seq), reversed(seq_next)):
+            t = (torch.ones(n) * i).to(x.device) #shape (n)
+            next_t = (torch.ones(n) * j).to(x.device)
+            at = compute_alpha(b, t.long())
+            at_next = compute_alpha(b, next_t.long())
+            xt = xs[-1].to('cuda')
