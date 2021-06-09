@@ -117,4 +117,14 @@ def ddpm_steps(x, seq, model, b, **kwargs):
             next_t = (torch.ones(n) * j).to(x.device)
             at = compute_alpha(betas, t.long())
             atm1 = compute_alpha(betas, next_t.long())
-            beta_t
+            beta_t = 1 - at / atm1
+            x = xs[-1].to('cuda')
+
+            output = model(x, t.float())
+            e = output
+
+            x0_from_e = (1.0 / at).sqrt() * x - (1.0 / at - 1).sqrt() * e
+            x0_from_e = torch.clamp(x0_from_e, -1, 1)
+            x0_preds.append(x0_from_e.to('cpu'))
+            mean_eps = (
+           
