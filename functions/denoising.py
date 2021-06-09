@@ -134,4 +134,9 @@ def ddpm_steps(x, seq, model, b, **kwargs):
             noise = torch.randn_like(x)
             mask = 1 - (t == 0).float()
             mask = mask.view(-1, 1, 1, 1)
-            logvar = beta
+            logvar = beta_t.log()
+            sample = mean + mask * torch.exp(0.5 * logvar) * noise
+            xs.append(sample.to('cpu'))
+    return xs, x0_preds
+
+
