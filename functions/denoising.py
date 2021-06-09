@@ -111,4 +111,10 @@ def ddpm_steps(x, seq, model, b, **kwargs):
         seq_next = [-1] + list(seq[:-1])
         xs = [x]
         x0_preds = []
-        bet
+        betas = b
+        for i, j in zip(reversed(seq), reversed(seq_next)):
+            t = (torch.ones(n) * i).to(x.device)
+            next_t = (torch.ones(n) * j).to(x.device)
+            at = compute_alpha(betas, t.long())
+            atm1 = compute_alpha(betas, next_t.long())
+            beta_t
