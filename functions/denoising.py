@@ -127,4 +127,11 @@ def ddpm_steps(x, seq, model, b, **kwargs):
             x0_from_e = torch.clamp(x0_from_e, -1, 1)
             x0_preds.append(x0_from_e.to('cpu'))
             mean_eps = (
-           
+                (atm1.sqrt() * beta_t) * x0_from_e + ((1 - beta_t).sqrt() * (1 - atm1)) * x
+            ) / (1.0 - at)
+
+            mean = mean_eps
+            noise = torch.randn_like(x)
+            mask = 1 - (t == 0).float()
+            mask = mask.view(-1, 1, 1, 1)
+            logvar = beta
