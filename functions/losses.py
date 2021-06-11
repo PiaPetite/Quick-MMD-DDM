@@ -18,4 +18,15 @@ def noise_estimation_loss(model,
 
 
 loss_registry = {
-    'simple': n
+    'simple': noise_estimation_loss,
+}
+
+
+
+def _polynomial_kernel(X: torch.Tensor, Y: torch.Tensor = None, degree: int = 1, gamma = None,
+                       coef0: float = 1.) -> torch.Tensor:
+    """
+    Compute the polynomial kernel between x and y
+    K(X, Y) = (gamma <X, Y> + coef0)^degree
+    Args:
+        X: Tensor with
