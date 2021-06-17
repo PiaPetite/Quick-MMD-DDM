@@ -37,4 +37,20 @@ def _polynomial_kernel(X: torch.Tensor, Y: torch.Tensor = None, degree: int = 1,
     Returns:
         Gram matrix : Array with shape (n_samples_1, n_samples_2)
     Reference:
-   
+        https://scikit-learn.org/stable/modules/generated/sklearn.metrics.pairwise.polynomial_kernel.html
+    """
+
+    if Y is None:
+        Y = X
+
+    if gamma is None:
+        gamma = 1.0 / X.size(1)
+
+    K = torch.mm(X, Y.T)
+    K *= gamma
+    K += coef0
+    K.pow_(degree)
+    return K
+
+
+d
