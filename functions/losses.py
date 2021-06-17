@@ -29,4 +29,12 @@ def _polynomial_kernel(X: torch.Tensor, Y: torch.Tensor = None, degree: int = 1,
     Compute the polynomial kernel between x and y
     K(X, Y) = (gamma <X, Y> + coef0)^degree
     Args:
-        X: Tensor with
+        X: Tensor with shape (n_samples_1, n_features)
+        Y: torch.Tensor of shape (n_samples_2, n_features)
+        degree: default 3
+        gamma: if None, defaults to 1.0 / n_features.
+        coef0 : default 1
+    Returns:
+        Gram matrix : Array with shape (n_samples_1, n_samples_2)
+    Reference:
+   
