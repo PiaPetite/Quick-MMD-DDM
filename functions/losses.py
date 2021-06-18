@@ -53,4 +53,10 @@ def _polynomial_kernel(X: torch.Tensor, Y: torch.Tensor = None, degree: int = 1,
     return K
 
 
-d
+def _rbf_kernel(X: torch.Tensor, Y: torch.Tensor = None, gamma = None) -> torch.Tensor:
+    """
+    Compute the rbf kernel between X and Y
+    K(X, Y) = exp(-1/2sigma ||X - Y||^2)
+    Args:
+        X: Tensor with shape (n_samples_1, n_features)
+        Y: t
