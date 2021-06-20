@@ -59,4 +59,12 @@ def _rbf_kernel(X: torch.Tensor, Y: torch.Tensor = None, gamma = None) -> torch.
     K(X, Y) = exp(-1/2sigma ||X - Y||^2)
     Args:
         X: Tensor with shape (n_samples_1, n_features)
-        Y: t
+        Y: torch.Tensor of shape (n_samples_2, n_features)
+        gamma: if None, defaults to 1.0 / n_features.
+    Returns:
+        Gram matrix : Array with shape (n_samples_1, n_samples_2)
+    Reference:
+        https://scikit-learn.org/stable/modules/generated/sklearn.metrics.pairwise.rbf_kernel.html
+    """
+
+    if Y is Non
