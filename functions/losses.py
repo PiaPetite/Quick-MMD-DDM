@@ -67,4 +67,22 @@ def _rbf_kernel(X: torch.Tensor, Y: torch.Tensor = None, gamma = None) -> torch.
         https://scikit-learn.org/stable/modules/generated/sklearn.metrics.pairwise.rbf_kernel.html
     """
 
-    if Y is Non
+    if Y is None:
+        Y = X
+
+    if gamma is None:
+        gamma = 1.0 / X.size(1)
+
+    X_norms = (X ** 2).sum(dim=1).view(-1, 1)
+    Y_t = Y.t()
+    Y_norms = (Y ** 2).sum(dim=1).view(1, -1)
+
+    K = X_norms + Y_norms - 2.0 * torch.mm(X, Y_t)
+    K *= -gamma
+    K.exp_()
+    return K
+
+
+
+
+def _mmd2_and_varianc
