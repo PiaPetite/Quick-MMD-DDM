@@ -85,4 +85,9 @@ def _rbf_kernel(X: torch.Tensor, Y: torch.Tensor = None, gamma = None) -> torch.
 
 
 
-def _mmd2_and_varianc
+def _mmd2_and_variance(K_XX: torch.Tensor, K_XY: torch.Tensor, K_YY: torch.Tensor, unit_diagonal: bool = False,
+                       mmd_est: str = 'unbiased', var_at_m = None, ret_var: bool = False): 
+        
+    # based on
+    # https://github.com/dougalsutherland/opt-mmd/blob/master/two_sample/mmd.py
+  
