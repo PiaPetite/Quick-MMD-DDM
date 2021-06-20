@@ -90,4 +90,11 @@ def _mmd2_and_variance(K_XX: torch.Tensor, K_XY: torch.Tensor, K_YY: torch.Tenso
         
     # based on
     # https://github.com/dougalsutherland/opt-mmd/blob/master/two_sample/mmd.py
-  
+    # but changed to not compute the full kernel matrix at once
+    m = K_XX.size(0)
+    assert K_XX.size() == (m, m)
+    assert K_XY.size() == (m, m)
+    assert K_YY.size() == (m, m)
+
+    # Get the various sums of kernels that we'll use
+    # Kts drop the diagonal, but we don't need to compute them explicitl
