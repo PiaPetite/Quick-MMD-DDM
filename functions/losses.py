@@ -97,4 +97,17 @@ def _mmd2_and_variance(K_XX: torch.Tensor, K_XY: torch.Tensor, K_YY: torch.Tenso
     assert K_YY.size() == (m, m)
 
     # Get the various sums of kernels that we'll use
-    # Kts drop the diagonal, but we don't need to compute them explicitl
+    # Kts drop the diagonal, but we don't need to compute them explicitly
+    if unit_diagonal:
+        diag_X = diag_Y = 1
+    else:
+        diag_X = torch.diagonal(K_XX)
+        diag_Y = torch.diagonal(K_YY)
+
+       
+    Kt_XX_sums = K_XX.sum(dim=1) - diag_X
+    Kt_YY_sums = K_YY.sum(dim=1) - diag_Y
+    K_XY_sums_0 = K_XY.sum(dim=0)
+ 
+
+    Kt_XX_sum = Kt_X
