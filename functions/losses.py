@@ -110,4 +110,15 @@ def _mmd2_and_variance(K_XX: torch.Tensor, K_XY: torch.Tensor, K_YY: torch.Tenso
     K_XY_sums_0 = K_XY.sum(dim=0)
  
 
-    Kt_XX_sum = Kt_X
+    Kt_XX_sum = Kt_XX_sums.sum()
+    Kt_YY_sum = Kt_YY_sums.sum()
+    K_XY_sum = K_XY_sums_0.sum()
+
+    # Compute the MMD^2 statistic.
+    mmd2 = (Kt_XX_sum + Kt_YY_sum) / (m * (m - 1)) - 2 * K_XY_sum / (m * m)
+  
+    return mmd2
+
+
+def _sqn(tensor: torch.Tensor) -> torch.Tensor:
+    flat = tensor.flatten(
