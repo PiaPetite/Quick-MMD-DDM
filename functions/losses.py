@@ -121,4 +121,11 @@ def _mmd2_and_variance(K_XX: torch.Tensor, K_XY: torch.Tensor, K_YY: torch.Tenso
 
 
 def _sqn(tensor: torch.Tensor) -> torch.Tensor:
-    flat = tensor.flatten(
+    flat = tensor.flatten()
+    return flat.dot(flat)
+
+def generate_random_projection(n_features: int, n_projections: int, device: torch.device = None) -> torch.Tensor:
+    """
+    Generates a random projection matrix of shape (n_features, n_projections)
+    Args:
+        n_features: 
