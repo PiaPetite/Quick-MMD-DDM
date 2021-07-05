@@ -128,4 +128,12 @@ def generate_random_projection(n_features: int, n_projections: int, device: torc
     """
     Generates a random projection matrix of shape (n_features, n_projections)
     Args:
-        n_features: 
+        n_features: number of features
+        n_projections: number of projections
+        device: device to store the matrix
+    Returns:
+        Tensor of shape (n_features, n_projections)
+    """
+    return torch.randn((n_features, n_projections), device=device)  
+    
+class KID(BaseFeatureMetric):
