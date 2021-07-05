@@ -137,3 +137,7 @@ def generate_random_projection(n_features: int, n_projections: int, device: torc
     return torch.randn((n_features, n_projections), device=device)  
     
 class KID(BaseFeatureMetric):
+    r"""Interface of Kernel Inception Distance.
+    It's computed for a whole set of data and uses features from encoder instead of images itself to decrease
+    computation cost. KID can compare two data distributions with different number of samples.
+    But dimen
