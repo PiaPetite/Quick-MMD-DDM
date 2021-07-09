@@ -149,4 +149,9 @@ class KID(BaseFeatureMetric):
         average: If `True` recomputes metric `n_subsets` times using `subset_size` elements.
         n_subsets: Number of repeats. Ignored if `average` is False
         subset_size: Size of each subset for repeat. Ignored if `average` is False
-        ret_var: Whethe
+        ret_var: Whether to return variance after the distance is computed.
+            This function will return ``Tuple[torch.Tensor, torch.Tensor]`` in this case. Default: False
+    Examples:
+        >>> kid_metric = KID()
+        >>> x_feats = torch.rand(10000, 1024)
+        >>> y_feats =
