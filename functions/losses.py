@@ -145,4 +145,8 @@ class KID(BaseFeatureMetric):
         degree: Degree of a polynomial functions used in kernels. Default: 3
         gamma: Kernel parameter. See paper for details
         coef0: Kernel parameter. See paper for details
-        var_at_m: K
+        var_at_m: Kernel variance. Default is `None`
+        average: If `True` recomputes metric `n_subsets` times using `subset_size` elements.
+        n_subsets: Number of repeats. Ignored if `average` is False
+        subset_size: Size of each subset for repeat. Ignored if `average` is False
+        ret_var: Whethe
