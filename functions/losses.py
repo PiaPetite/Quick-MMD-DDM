@@ -161,4 +161,13 @@ class KID(BaseFeatureMetric):
     """
 
     def __init__(self, degree: int = 1, gamma = None, coef0: int = 1, var_at_m = None,
-                 average: bool = False, n
+                 average: bool = False, n_subsets: int = 50, subset_size = 1000, ret_var: bool = False
+                 ) -> None:
+        super().__init__()
+
+        self.degree = degree
+        self.gamma = gamma
+        self.coef0 = coef0
+        self.ret_var = ret_var
+        if average:
+            self.n_subsets = n_su
