@@ -154,4 +154,11 @@ class KID(BaseFeatureMetric):
     Examples:
         >>> kid_metric = KID()
         >>> x_feats = torch.rand(10000, 1024)
-        >>> y_feats =
+        >>> y_feats = torch.rand(10000, 1024)
+        >>> kid: torch.Tensor = kid_metric(x_feats, y_feats)
+    References:
+        Demystifying MMD GANs https://arxiv.org/abs/1801.01401
+    """
+
+    def __init__(self, degree: int = 1, gamma = None, coef0: int = 1, var_at_m = None,
+                 average: bool = False, n
