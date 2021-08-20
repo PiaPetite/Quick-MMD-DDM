@@ -196,4 +196,13 @@ class KID(BaseFeatureMetric):
         results = []
         for _ in range(self.n_subsets):
             x_subset = x_features[torch.randperm(len(x_features))[:subset_size]]
-            y_subset = y_features[torch.randperm(len(y_features)
+            y_subset = y_features[torch.randperm(len(y_features))[:subset_size]]
+
+            # use  k(x, y) = (gamma <x, y> + coef0)^degree
+            # default gamma is 1 / dim
+            K_XX = _polynomial_kernel(
+                x_subset,
+                None,
+                degree=self.degree,
+                gamma=self.gamma,
+                coef0=self.coe
