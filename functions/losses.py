@@ -205,4 +205,14 @@ class KID(BaseFeatureMetric):
                 None,
                 degree=self.degree,
                 gamma=self.gamma,
-                coef0=self.coe
+                coef0=self.coef0)
+            K_YY = _polynomial_kernel(
+                y_subset,
+                None,
+                degree=self.degree,
+                gamma=self.gamma,
+                coef0=self.coef0)
+            K_XY = _polynomial_kernel(
+                x_subset,
+                y_subset,
+       
