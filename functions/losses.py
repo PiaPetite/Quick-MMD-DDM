@@ -223,4 +223,11 @@ class KID(BaseFeatureMetric):
             results.append(out)
 
        
-        score = torch.mean(torch.stack(results, dim
+        score = torch.mean(torch.stack(results, dim=0))
+        return score
+
+
+class KID_rbf(BaseFeatureMetric):
+    r"""Interface of Kernel Inception Distance.
+    It's computed for a whole set of data and uses features from encoder instead of images itself to decrease
+    computation cost. KID can compare two data distributions with 
