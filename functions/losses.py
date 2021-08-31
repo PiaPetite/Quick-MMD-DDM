@@ -230,4 +230,9 @@ class KID(BaseFeatureMetric):
 class KID_rbf(BaseFeatureMetric):
     r"""Interface of Kernel Inception Distance.
     It's computed for a whole set of data and uses features from encoder instead of images itself to decrease
-    computation cost. KID can compare two data distributions with 
+    computation cost. KID can compare two data distributions with different number of samples.
+    But dimensionalities should match, otherwise it won't be possible to correctly compute statistics.
+    Args:
+        degree: Degree of a polynomial functions used in kernels. Default: 3
+        gamma: Kernel parameter. See paper for details
+        coef0: Kern
