@@ -215,4 +215,12 @@ class KID(BaseFeatureMetric):
             K_XY = _polynomial_kernel(
                 x_subset,
                 y_subset,
+                degree=self.degree,
+                gamma=self.gamma,
+                coef0=self.coef0)
+
+            out = _mmd2_and_variance(K_XX, K_XY, K_YY, var_at_m=var_at_m, ret_var=self.ret_var)
+            results.append(out)
+
        
+        score = torch.mean(torch.stack(results, dim
