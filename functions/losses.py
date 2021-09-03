@@ -235,4 +235,8 @@ class KID_rbf(BaseFeatureMetric):
     Args:
         degree: Degree of a polynomial functions used in kernels. Default: 3
         gamma: Kernel parameter. See paper for details
-        coef0: Kern
+        coef0: Kernel parameter. See paper for details
+        var_at_m: Kernel variance. Default is `None`
+        average: If `True` recomputes metric `n_subsets` times using `subset_size` elements.
+        n_subsets: Number of repeats. Ignored if `average` is False
+        subset_size: Size of each subs
