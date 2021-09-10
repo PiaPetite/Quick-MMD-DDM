@@ -244,4 +244,12 @@ class KID_rbf(BaseFeatureMetric):
             This function will return ``Tuple[torch.Tensor, torch.Tensor]`` in this case. Default: False
     Examples:
         >>> kid_metric = KID()
-        >>> x_feats = torch.rand(
+        >>> x_feats = torch.rand(10000, 1024)
+        >>> y_feats = torch.rand(10000, 1024)
+        >>> kid: torch.Tensor = kid_metric(x_feats, y_feats)
+    References:
+        Demystifying MMD GANs https://arxiv.org/abs/1801.01401
+    """
+
+    def __init__(self, degree: int = 1, gamma = None, coef0: int = 1, var_at_m = None,
+                 average: boo
