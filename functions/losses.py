@@ -261,4 +261,12 @@ class KID_rbf(BaseFeatureMetric):
         self.coef0 = coef0
         self.ret_var = ret_var
         if average:
-            self.n_subsets = n_s
+            self.n_subsets = n_subsets
+            self.subset_size = subset_size
+        else:
+            self.n_subsets = 1
+            self.subset_size = None
+
+
+    def compute_metric(self, x_features: torch.Tensor, y_features: torch.Tensor):
+        """Computes KID (polynomial MMD) for given sets of feat
