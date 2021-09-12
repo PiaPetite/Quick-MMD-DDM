@@ -269,4 +269,9 @@ class KID_rbf(BaseFeatureMetric):
 
 
     def compute_metric(self, x_features: torch.Tensor, y_features: torch.Tensor):
-        """Computes KID (polynomial MMD) for given sets of feat
+        """Computes KID (polynomial MMD) for given sets of features, obtained from Inception net
+        or any other feature extractor.
+        Samples must be in range [0, 1].
+        Args:
+            x_features: Samples from data distribution. Shape :math:`(N_x, D)`
+            y_features: Samples from data distribution. Shape :math:`(N_y, D
