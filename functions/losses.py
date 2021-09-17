@@ -301,4 +301,15 @@ class KID_rbf(BaseFeatureMetric):
                 gamma=self.gamma)
 
             K_XY = _rbf_kernel(
-              
+                x_subset,
+                y_subset,
+                gamma=self.gamma)
+
+            out = _mmd2_and_variance(K_XX, K_XY, K_YY, var_at_m=var_at_m, ret_var=self.ret_var)
+            results.append(out)
+
+       
+        score = torch.mean(torch.stack(results, dim=0))
+        return score
+
+
