@@ -290,4 +290,15 @@ class KID_rbf(BaseFeatureMetric):
             x_subset = x_features[torch.randperm(len(x_features))[:subset_size]]
             y_subset = y_features[torch.randperm(len(y_features))[:subset_size]]
 
- 
+            K_XX = _rbf_kernel(
+                x_subset,
+                None,
+                gamma=self.gamma)
+
+            K_YY = _rbf_kernel(
+                y_subset,
+                None,
+                gamma=self.gamma)
+
+            K_XY = _rbf_kernel(
+              
