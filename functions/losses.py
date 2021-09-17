@@ -274,4 +274,11 @@ class KID_rbf(BaseFeatureMetric):
         Samples must be in range [0, 1].
         Args:
             x_features: Samples from data distribution. Shape :math:`(N_x, D)`
-            y_features: Samples from data distribution. Shape :math:`(N_y, D
+            y_features: Samples from data distribution. Shape :math:`(N_y, D)`
+        Returns:
+            KID score and variance (optional).
+        """
+        _validate_input([x_features, y_features], dim_range=(2, 2), size_range=(1, 2))
+        var_at_m = min(x_features.size(0), y_features.size(0))
+        if self.subset_size is None:
+            subset_s
