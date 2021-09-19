@@ -22,4 +22,14 @@ def parse_args_and_config():
     )
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
     parser.add_argument(
-        "--exp", type=str, default="exp", help="Path for saving 
+        "--exp", type=str, default="exp", help="Path for saving running related data."
+    )
+    parser.add_argument(
+        "--doc",
+        type=str,
+        required=True,
+        help="A string for documentation purpose. "
+        "Will be the name of the log folder.",
+    )
+    parser.add_argument(
+        "--comment", type=str, default="", help="A string for experi
