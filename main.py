@@ -32,4 +32,13 @@ def parse_args_and_config():
         "Will be the name of the log folder.",
     )
     parser.add_argument(
-        "--comment", type=str, default="", help="A string for experi
+        "--comment", type=str, default="", help="A string for experiment comment"
+    )
+    parser.add_argument(
+        "--verbose",
+        type=str,
+        default="info",
+        help="Verbose level: info | debug | warning | critical",
+    )
+    parser.add_argument("--test", action="store_true", help="Whether to test the model")
+    pa
