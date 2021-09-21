@@ -41,4 +41,12 @@ def parse_args_and_config():
         help="Verbose level: info | debug | warning | critical",
     )
     parser.add_argument("--test", action="store_true", help="Whether to test the model")
-    pa
+    parser.add_argument(
+        "--sample",
+        action="store_true",
+        help="Whether to produce samples from the model",
+    )
+    parser.add_argument("--fid", action="store_true")
+    parser.add_argument("--interpolation", action="store_true")
+    parser.add_argument(
+        "--resume_
