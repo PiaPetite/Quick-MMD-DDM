@@ -49,4 +49,16 @@ def parse_args_and_config():
     parser.add_argument("--fid", action="store_true")
     parser.add_argument("--interpolation", action="store_true")
     parser.add_argument(
-        "--resume_
+        "--resume_training", action="store_true", help="Whether to resume training"
+    )
+    parser.add_argument(
+        "-i",
+        "--image_folder",
+        type=str,
+        default="images",
+        help="The folder name of samples",
+    )
+    parser.add_argument(
+        "--ni",
+        action="store_true",
+        help="No inte
