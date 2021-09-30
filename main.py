@@ -61,4 +61,15 @@ def parse_args_and_config():
     parser.add_argument(
         "--ni",
         action="store_true",
-        help="No inte
+        help="No interaction. Suitable for Slurm Job launcher",
+    )
+    parser.add_argument("--use_pretrained", action="store_true")
+    parser.add_argument(
+        "--sample_type",
+        type=str,
+        default="generalized",
+        help="sampling approach (generalized or ddpm_noisy)",
+    )
+    parser.add_argument(
+        "--skip_type",
+        
