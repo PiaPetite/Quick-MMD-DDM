@@ -95,4 +95,14 @@ def parse_args_and_config():
     # parse config file
     with open(os.path.join("configs", args.config), "r") as f:
         config = yaml.safe_load(f)
-    new_config = dict2names
+    new_config = dict2namespace(config)
+
+    tb_path = os.path.join(args.exp, "tensorboard", args.doc)
+
+    if not args.test and not args.sample:
+        if not args.resume_training:
+            if os.path.exists(args.log_path):
+                overwrite = False
+                if args.ni:
+                    overwrite = True
+           
