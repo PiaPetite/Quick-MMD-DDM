@@ -83,4 +83,9 @@ def parse_args_and_config():
         "--eta",
         type=float,
         default=0.0,
-  
+        help="eta used to control the variances of sigma",
+    )
+    parser.add_argument("--sequence", action="store_true")
+    parser.add_argument("--train", action="store_true")
+    parser.add_argument("--test_FID", action="store_true")
+    parser.add_argument("--sample_sheet", action="store_tr
