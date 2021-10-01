@@ -88,4 +88,11 @@ def parse_args_and_config():
     parser.add_argument("--sequence", action="store_true")
     parser.add_argument("--train", action="store_true")
     parser.add_argument("--test_FID", action="store_true")
-    parser.add_argument("--sample_sheet", action="store_tr
+    parser.add_argument("--sample_sheet", action="store_true")
+    args = parser.parse_args()
+    args.log_path = os.path.join(args.exp, "logs", args.doc)
+
+    # parse config file
+    with open(os.path.join("configs", args.config), "r") as f:
+        config = yaml.safe_load(f)
+    new_config = dict2names
