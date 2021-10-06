@@ -128,4 +128,10 @@ def parse_args_and_config():
         new_config.tb_logger = tb.SummaryWriter(log_dir=tb_path)
         # setup logger
         level = getattr(logging, args.verbose.upper(), None)
-        if not isinstance(lev
+        if not isinstance(level, int):
+            raise ValueError("level {} not supported".format(args.verbose))
+
+        handler1 = logging.StreamHandler()
+        handler2 = logging.FileHandler(os.path.join(args.log_path, "stdout.txt"))
+        formatter = logging.Formatter(
+            "%(lev
