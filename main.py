@@ -120,4 +120,12 @@ def parse_args_and_config():
                     print("Folder exists. Program halted.")
                     sys.exit(0)
             else:
-                os.makedirs(args.l
+                os.makedirs(args.log_path)
+
+            with open(os.path.join(args.log_path, "config.yml"), "w") as f:
+                yaml.dump(new_config, f, default_flow_style=False)
+
+        new_config.tb_logger = tb.SummaryWriter(log_dir=tb_path)
+        # setup logger
+        level = getattr(logging, args.verbose.upper(), None)
+        if not isinstance(lev
