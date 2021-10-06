@@ -113,4 +113,11 @@ def parse_args_and_config():
                 if overwrite:
                     shutil.rmtree(args.log_path)
                     shutil.rmtree(tb_path)
-          
+                    os.makedirs(args.log_path)
+                    if os.path.exists(tb_path):
+                        shutil.rmtree(tb_path)
+                else:
+                    print("Folder exists. Program halted.")
+                    sys.exit(0)
+            else:
+                os.makedirs(args.l
