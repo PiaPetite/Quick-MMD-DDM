@@ -150,4 +150,13 @@ def parse_args_and_config():
 
         handler1 = logging.StreamHandler()
         formatter = logging.Formatter(
-            "%(levelname)s - %
+            "%(levelname)s - %(filename)s - %(asctime)s - %(message)s"
+        )
+        handler1.setFormatter(formatter)
+        logger = logging.getLogger()
+        logger.addHandler(handler1)
+        logger.setLevel(level)
+
+        if args.sample:
+            os.makedirs(os.path.join(args.exp, "image_samples"), exist_ok=True)
+     
