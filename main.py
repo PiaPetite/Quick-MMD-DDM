@@ -144,4 +144,10 @@ def parse_args_and_config():
         logger.setLevel(level)
 
     else:
-     
+        level = getattr(logging, args.verbose.upper(), None)
+        if not isinstance(level, int):
+            raise ValueError("level {} not supported".format(args.verbose))
+
+        handler1 = logging.StreamHandler()
+        formatter = logging.Formatter(
+            "%(levelname)s - %
