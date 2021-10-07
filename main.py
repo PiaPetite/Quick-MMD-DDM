@@ -134,4 +134,14 @@ def parse_args_and_config():
         handler1 = logging.StreamHandler()
         handler2 = logging.FileHandler(os.path.join(args.log_path, "stdout.txt"))
         formatter = logging.Formatter(
-            "%(lev
+            "%(levelname)s - %(filename)s - %(asctime)s - %(message)s"
+        )
+        handler1.setFormatter(formatter)
+        handler2.setFormatter(formatter)
+        logger = logging.getLogger()
+        logger.addHandler(handler1)
+        logger.addHandler(handler2)
+        logger.setLevel(level)
+
+    else:
+     
