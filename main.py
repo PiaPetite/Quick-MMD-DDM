@@ -166,4 +166,11 @@ def parse_args_and_config():
                 os.makedirs(args.image_folder)
             else:
                 if not (args.fid or args.interpolation):
-                  
+                    overwrite = False
+                    if args.ni:
+                        overwrite = True
+                    else:
+                        response = input(
+                            f"Image folder {args.image_folder} already exists. Overwrite? (Y/N)"
+                        )
+       
