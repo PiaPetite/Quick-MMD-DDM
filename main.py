@@ -180,4 +180,14 @@ def parse_args_and_config():
                         shutil.rmtree(args.image_folder)
                         os.makedirs(args.image_folder)
                     else:
-                        print("Output image folder exists
+                        print("Output image folder exists. Program halted.")
+                        sys.exit(0)
+
+    # add device
+    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    logging.info("Using device: {}".format(device))
+    new_config.device = device
+
+    # set random seed
+    torch.manual_seed(args.seed)
+    np.r
