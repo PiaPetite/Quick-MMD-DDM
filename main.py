@@ -190,4 +190,15 @@ def parse_args_and_config():
 
     # set random seed
     torch.manual_seed(args.seed)
-    np.r
+    np.random.seed(args.seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(args.seed)
+
+    torch.backends.cudnn.benchmark = True
+
+    return args, new_config
+
+
+def dict2namespace(config):
+    namespace = argparse.Namespace()
+    for key, value in config.
