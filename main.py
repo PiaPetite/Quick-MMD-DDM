@@ -219,4 +219,11 @@ def main():
     try:
         runner = Diffusion(args, config)
 
-        if args.train and config.data.datase
+        if args.train and config.data.dataset == "CELEBA":
+            runner.train_celeba()
+        elif args.train and config.data.dataset == "CIFAR10":
+            runner.train_cifar()
+        elif args.train and config.data.dataset == "LSUN":
+            runner.train_lsun()
+        elif args.test_FID:
+  
