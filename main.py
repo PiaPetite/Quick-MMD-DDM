@@ -212,4 +212,11 @@ def dict2namespace(config):
 
 def main():
     args, config = parse_args_and_config()
-    logging.info("Writing 
+    logging.info("Writing log file to {}".format(args.log_path))
+    logging.info("Exp instance id = {}".format(os.getpid()))
+    logging.info("Exp comment = {}".format(args.comment))
+
+    try:
+        runner = Diffusion(args, config)
+
+        if args.train and config.data.datase
