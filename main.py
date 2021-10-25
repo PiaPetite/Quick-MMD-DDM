@@ -226,4 +226,16 @@ def main():
         elif args.train and config.data.dataset == "LSUN":
             runner.train_lsun()
         elif args.test_FID:
-  
+            runner.test_FID()
+        elif args.sample_sheet:
+            runner.sample_interpolation()
+        else:
+            runner.train()
+    except Exception:
+        logging.error(traceback.format_exc())
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
