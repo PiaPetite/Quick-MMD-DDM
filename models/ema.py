@@ -39,4 +39,11 @@ class EMAHelper(object):
             module_copy = type(module)(module.config).to(module.config.device)
             module_copy.load_state_dict(module.state_dict())
         # module_copy = copy.deepcopy(module)
-        se
+        self.ema(module_copy)
+        return module_copy
+
+    def state_dict(self):
+        return self.shadow
+
+    def load_state_dict(self, state_dict):
+        self.shadow = state_dict
