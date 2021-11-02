@@ -33,4 +33,10 @@ class EMAHelper(object):
             inner_module = module.module
             module_copy = type(inner_module)(
                 inner_module.config).to(inner_module.config.device)
-            module
+            module_copy.load_state_dict(inner_module.state_dict())
+            module_copy = nn.DataParallel(module_copy)
+        else:
+            module_copy = type(module)(module.config).to(module.config.device)
+            module_copy.load_state_dict(module.state_dict())
+        # module_copy = copy.deepcopy(module)
+        se
