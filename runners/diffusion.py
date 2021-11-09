@@ -23,4 +23,13 @@ from fid_utils.precalc_fid import calculate_activation_statistics_for_dataloader
 EPS = 1e-20
 
 import torchvision.utils as tvu
-from functions.image_utils impor
+from functions.image_utils import generate_sample_sheet, generate_sample_sheet_4, generate_sample_sheet_8
+ 
+
+
+
+def plot_grad_flow(named_parameters, i):
+    '''Plots the gradients flowing through different layers in the net during training.
+    Can be used for checking for possible gradient vanishing / exploding problems.
+    
+  
