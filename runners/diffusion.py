@@ -39,4 +39,8 @@ def plot_grad_flow(named_parameters, i):
     layers = []
     for n, p in named_parameters:
         if(p.requires_grad) and ("bias" not in n):
-            layers.ap
+            layers.append(n)
+            #print(f'{n}{p.grad.abs().mean().cpu().detach().numpy()}')
+            ave_grads.append(p.grad.abs().mean().cpu().detach().numpy())
+            max_grads.append(p.grad.abs().max().cpu().detach().numpy())
+    plt.bar(np.arange(len(max_grads)), max_grads, alpha=0.1, lw=1, col
