@@ -43,4 +43,9 @@ def plot_grad_flow(named_parameters, i):
             #print(f'{n}{p.grad.abs().mean().cpu().detach().numpy()}')
             ave_grads.append(p.grad.abs().mean().cpu().detach().numpy())
             max_grads.append(p.grad.abs().max().cpu().detach().numpy())
-    plt.bar(np.arange(len(max_grads)), max_grads, alpha=0.1, lw=1, col
+    plt.bar(np.arange(len(max_grads)), max_grads, alpha=0.1, lw=1, color="c")
+    plt.bar(np.arange(len(max_grads)), ave_grads, alpha=0.1, lw=1, color="b")
+    plt.hlines(0, 0, len(ave_grads)+1, lw=2, color="k" )
+    plt.xticks(range(0,len(ave_grads), 1), layers, rotation="vertical")
+    plt.xlim(left=0, right=len(ave_grads))
+    plt.ylim(botto
