@@ -54,4 +54,12 @@ def plot_grad_flow(named_parameters, i):
     plt.title("Gradient flow")
     plt.grid(True)
     plt.legend([Line2D([0], [0], color="c", lw=4),
-                Line2D([0], [0], color="b
+                Line2D([0], [0], color="b", lw=4),
+                Line2D([0], [0], color="k", lw=4)], ['max-gradient', 'mean-gradient', 'zero-gradient'])
+    plt.tight_layout() 
+    plt.savefig(f"./gradients/gradient_{i}.png", pad_inches = 9.0)
+
+def torch2hwcuint8(x, clip=False):
+    if clip:
+        x = torch.clamp(x, -1, 1)
+    x = (x + 1.0)
