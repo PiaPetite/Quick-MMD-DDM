@@ -62,4 +62,15 @@ def plot_grad_flow(named_parameters, i):
 def torch2hwcuint8(x, clip=False):
     if clip:
         x = torch.clamp(x, -1, 1)
-    x = (x + 1.0)
+    x = (x + 1.0) / 2.0
+    return x
+
+def get_beta_schedule(beta_schedule, *, beta_start, beta_end, num_diffusion_timesteps):
+    def sigmoid(x):
+        return 1 / (np.exp(-x) + 1)
+
+    if beta_schedule == "quad":
+        betas = (
+            np.linspace(
+                beta_start ** 0.5,
+             
