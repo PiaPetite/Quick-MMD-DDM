@@ -90,4 +90,13 @@ def get_beta_schedule(beta_schedule, *, beta_start, beta_end, num_diffusion_time
             num_diffusion_timesteps, 1, num_diffusion_timesteps, dtype=np.float64
         )
     elif beta_schedule == "sigmoid":
-        betas =
+        betas = np.linspace(-6, 6, num_diffusion_timesteps)
+        betas = sigmoid(betas) * (beta_end - beta_start) + beta_start
+    else:
+        raise NotImplementedError(beta_schedule)
+    assert betas.shape == (num_diffusion_timesteps,)
+    return betas
+
+def init_weights(m):
+    if isinstance(m, (nn.Linear, nn.Conv2d)):
+        nn.init.xavier_no
