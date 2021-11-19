@@ -99,4 +99,12 @@ def get_beta_schedule(beta_schedule, *, beta_start, beta_end, num_diffusion_time
 
 def init_weights(m):
     if isinstance(m, (nn.Linear, nn.Conv2d)):
-        nn.init.xavier_no
+        nn.init.xavier_normal_(m.weight)
+        if m.bias is not None:
+            nn.init.constant_(m.bias, 0)
+    elif isinstance(m, nn.LayerNorm):
+            nn.init.constant_(m.bias, 0)
+            nn.init.constant_(m.weight, 1.0)
+
+class Diffusion(object):
+    def __init__(self, args, config, device=None):
