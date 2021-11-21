@@ -108,3 +108,14 @@ def init_weights(m):
 
 class Diffusion(object):
     def __init__(self, args, config, device=None):
+        self.args = args
+        self.config = config
+        if device is None:
+            device = (
+                torch.device("cuda")
+                if torch.cuda.is_available()
+                else torch.device("cpu")
+            )
+        self.device = device
+
+        self.model_var_type = confi
