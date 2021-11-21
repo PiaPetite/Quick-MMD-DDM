@@ -124,4 +124,11 @@ class Diffusion(object):
             beta_start=config.diffusion.beta_start,
             beta_end=config.diffusion.beta_end,
             num_diffusion_timesteps=config.diffusion.num_diffusion_timesteps,
-       
+        )
+        betas = self.betas = torch.from_numpy(betas).float().to(self.device)
+        self.num_timesteps = betas.shape[0]
+
+        alphas = 1.0 - betas
+        alphas_cumprod = alphas.cumprod(dim=0)
+        alphas_cumprod_prev = torch.cat(
+            [torch.ones(1
