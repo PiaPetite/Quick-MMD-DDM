@@ -118,4 +118,10 @@ class Diffusion(object):
             )
         self.device = device
 
-        self.model_var_type = confi
+        self.model_var_type = config.model.var_type
+        betas = get_beta_schedule(
+            beta_schedule=config.diffusion.beta_schedule,
+            beta_start=config.diffusion.beta_start,
+            beta_end=config.diffusion.beta_end,
+            num_diffusion_timesteps=config.diffusion.num_diffusion_timesteps,
+       
