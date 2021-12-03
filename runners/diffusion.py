@@ -131,4 +131,12 @@ class Diffusion(object):
         alphas = 1.0 - betas
         alphas_cumprod = alphas.cumprod(dim=0)
         alphas_cumprod_prev = torch.cat(
-            [torch.ones(1
+            [torch.ones(1).to(device), alphas_cumprod[:-1]], dim=0
+        )
+        posterior_variance = (
+            betas * (1.0 - alphas_cumprod_prev) / (1.0 - alphas_cumprod)
+        )
+        if self.model_var_type == "fixedlarge":
+            self.logvar = betas.log()
+            # torch.cat(
+            # [posterior_variance
