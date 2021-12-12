@@ -156,4 +156,15 @@ class Diffusion(object):
         model = Model(config)
 
         model = model.to(self.device)
-        model = torch.nn.DataParalle
+        model = torch.nn.DataParallel(model)
+
+        optimizer = get_optimizer(self.config, model.parameters())
+
+        if self.config.model.ema:
+            ema_helper = EMAHelper(mu=self.config.model.ema_rate)
+            ema_helper.register(model)
+        else:
+            ema_helper = None
+
+        start_epoch, step = 0, 0
+     
