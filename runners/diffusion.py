@@ -173,4 +173,12 @@ class Diffusion(object):
 
             states[1]["param_groups"][0]["eps"] = self.config.optim.eps
             optimizer.load_state_dict(states[1])
-            start_epoc
+            start_epoch = states[2]
+            step = states[3]
+            if self.config.model.ema:
+                ema_helper.load_state_dict(states[4])
+
+        for epoch in range(start_epoch, self.config.training.n_epochs):
+            data_start = time.time()
+            data_time = 0
+            for i, (x, y) in 
