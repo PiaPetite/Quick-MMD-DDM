@@ -167,4 +167,10 @@ class Diffusion(object):
             ema_helper = None
 
         start_epoch, step = 0, 0
-     
+        if self.args.resume_training:
+            states = torch.load(os.path.join(self.args.log_path, "ckpt.pth"))
+            model.load_state_dict(states[0])
+
+            states[1]["param_groups"][0]["eps"] = self.config.optim.eps
+            optimizer.load_state_dict(states[1])
+            start_epoc
