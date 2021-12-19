@@ -189,4 +189,12 @@ class Diffusion(object):
 
                 x = x.to(self.device)
                 x = data_transform(self.config, x)
-                e = torch.randn_
+                e = torch.randn_like(x)
+                b = self.betas
+
+                # antithetic sampling
+                t = torch.randint(
+                    low=0, high=self.num_timesteps, size=(n // 2 + 1,)
+                ).to(self.device)
+                t = torch.cat([t, self.num_timesteps - t - 1], dim=0)[:n]
+                loss = loss_registry[
