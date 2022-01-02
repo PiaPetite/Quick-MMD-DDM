@@ -214,4 +214,12 @@ class Diffusion(object):
                     )
                 except Exception:
                     pass
-                optimi
+                optimizer.step()
+
+                if self.config.model.ema:
+                    ema_helper.update(model)
+
+                if step % self.config.training.snapshot_freq == 0 or step == 1:
+                    states = [
+                        model.state_dict(),
+                        optimizer.s
