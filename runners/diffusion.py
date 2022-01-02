@@ -222,4 +222,12 @@ class Diffusion(object):
                 if step % self.config.training.snapshot_freq == 0 or step == 1:
                     states = [
                         model.state_dict(),
-                        optimizer.s
+                        optimizer.state_dict(),
+                        epoch,
+                        step,
+                    ]
+                    if self.config.model.ema:
+                        states.append(ema_helper.state_dict())
+
+                    torch.save(
+                        state
