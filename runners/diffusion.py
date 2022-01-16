@@ -238,4 +238,12 @@ class Diffusion(object):
                 data_start = time.time()
 
     def sample(self):
-        model = Model(self.
+        model = Model(self.config)
+
+        if not self.args.use_pretrained:
+            if getattr(self.config.sampling, "ckpt_id", None) is None:
+                states = torch.load(
+                    os.path.join(self.args.log_path, "ckpt.pth"),
+                    map_location=self.config.device,
+                )
+           
