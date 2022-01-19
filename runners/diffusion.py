@@ -246,4 +246,12 @@ class Diffusion(object):
                     os.path.join(self.args.log_path, "ckpt.pth"),
                     map_location=self.config.device,
                 )
-           
+            else:
+                states = torch.load(
+                    os.path.join(
+                        self.args.log_path, f"ckpt_{self.config.sampling.ckpt_id}.pth"
+                    ),
+                    map_location=self.config.device,
+                )
+            model = model.to(self.device)
+            model = torch.
