@@ -254,4 +254,10 @@ class Diffusion(object):
                     map_location=self.config.device,
                 )
             model = model.to(self.device)
-            model = torch.
+            model = torch.nn.DataParallel(model)
+            model.load_state_dict(states[0], strict=True)
+
+            if self.config.model.ema:
+                ema_helper = EMAHelper(mu=self.config.model.ema_rate)
+                ema_helper.register(model)
+                ema_helper.load_state_dict(stat
