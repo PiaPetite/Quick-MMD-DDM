@@ -268,4 +268,10 @@ class Diffusion(object):
             # This used the pretrained DDPM model, see https://github.com/pesser/pytorch_diffusion
             if self.config.data.dataset == "CIFAR10":
                 name = "cifar10"
-   
+            elif self.config.data.dataset == "LSUN":
+                name = f"lsun_{self.config.data.category}"
+            else:
+                raise ValueError
+            ckpt = get_ckpt_path(f"ema_{name}")
+            print("Loading checkpoint {}".format(ckpt))
+            model.load_state
