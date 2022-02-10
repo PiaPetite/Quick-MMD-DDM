@@ -274,4 +274,14 @@ class Diffusion(object):
                 raise ValueError
             ckpt = get_ckpt_path(f"ema_{name}")
             print("Loading checkpoint {}".format(ckpt))
-            model.load_state
+            model.load_state_dict(torch.load(ckpt, map_location=self.device))
+            model.to(self.device)
+            model = torch.nn.DataParallel(model)
+
+        model.eval()
+
+        if self.args.fid:
+            self.sample_fid(model)
+        elif self.args.interpolation:
+            self.sample_interpolation(model)
+        eli
