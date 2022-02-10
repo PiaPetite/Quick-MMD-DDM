@@ -284,4 +284,12 @@ class Diffusion(object):
             self.sample_fid(model)
         elif self.args.interpolation:
             self.sample_interpolation(model)
-        eli
+        elif self.args.sequence:
+            self.sample_sequence(model)
+        else:
+            raise NotImplementedError("Sample procedeure not defined")
+
+    def sample_fid(self, model):
+        config = self.config
+        img_id = len(glob.glob(f"{self.args.image_folder}/*"))
+        print(f"starting fr
