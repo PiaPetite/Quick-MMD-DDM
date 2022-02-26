@@ -309,4 +309,11 @@ class Diffusion(object):
                     device=self.device,
                 )
 
-                x = sel
+                x = self.sample_image(x, model)
+                x = inverse_data_transform(config, x)
+
+                for i in range(n):
+                    tvu.save_image(
+                        x[i], os.path.join(self.args.image_folder, f"{img_id}.png")
+                    )
+                    img_i
