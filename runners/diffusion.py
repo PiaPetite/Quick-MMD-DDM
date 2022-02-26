@@ -316,4 +316,17 @@ class Diffusion(object):
                     tvu.save_image(
                         x[i], os.path.join(self.args.image_folder, f"{img_id}.png")
                     )
-                    img_i
+                    img_id += 1
+
+    def sample_sequence(self, model):
+        config = self.config
+
+        x = torch.randn(
+            8,
+            config.data.channels,
+            config.data.image_size,
+            config.data.image_size,
+            device=self.device,
+        )
+
+        # NOTE: This means th
