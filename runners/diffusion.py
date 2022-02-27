@@ -329,4 +329,12 @@ class Diffusion(object):
             device=self.device,
         )
 
-        # NOTE: This means th
+        # NOTE: This means that we are producing each predicted x0, not x_{t-1} at timestep t.
+        with torch.no_grad():
+            _, x = self.sample_image(x, model, last=False)
+
+        x = [inverse_data_transform(config, y) for y in x]
+
+        for i in range(len(x)):
+            for j in range(x[i].size(0)):
+                t
