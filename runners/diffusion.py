@@ -337,4 +337,12 @@ class Diffusion(object):
 
         for i in range(len(x)):
             for j in range(x[i].size(0)):
-                t
+                tvu.save_image(
+                    x[i][j], os.path.join(self.args.image_folder, f"{j}_{i}.png")
+                )
+
+    def sample_interpolation(self, model):
+        config = self.config
+
+        def slerp(z1, z2, alpha):
+            theta = torch.acos(torch.sum(z1 * z2) / (torch.norm(z1) * torch.
