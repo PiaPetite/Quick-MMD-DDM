@@ -345,4 +345,14 @@ class Diffusion(object):
         config = self.config
 
         def slerp(z1, z2, alpha):
-            theta = torch.acos(torch.sum(z1 * z2) / (torch.norm(z1) * torch.
+            theta = torch.acos(torch.sum(z1 * z2) / (torch.norm(z1) * torch.norm(z2)))
+            return (
+                torch.sin((1 - alpha) * theta) / torch.sin(theta) * z1
+                + torch.sin(alpha * theta) / torch.sin(theta) * z2
+            )
+
+        z1 = torch.randn(
+            1,
+            config.data.channels,
+            config.data.image_size,
+   
