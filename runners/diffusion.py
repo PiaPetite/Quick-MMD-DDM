@@ -355,4 +355,14 @@ class Diffusion(object):
             1,
             config.data.channels,
             config.data.image_size,
-   
+            config.data.image_size,
+            device=self.device,
+        )
+        z2 = torch.randn(
+            1,
+            config.data.channels,
+            config.data.image_size,
+            config.data.image_size,
+            device=self.device,
+        )
+        alpha = torch.arange(0.0, 1.0
