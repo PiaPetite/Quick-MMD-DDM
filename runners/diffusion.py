@@ -365,4 +365,14 @@ class Diffusion(object):
             config.data.image_size,
             device=self.device,
         )
-        alpha = torch.arange(0.0, 1.0
+        alpha = torch.arange(0.0, 1.01, 0.1).to(z1.device)
+        z_ = []
+        for i in range(alpha.size(0)):
+            z_.append(slerp(z1, z2, alpha[i]))
+
+        x = torch.cat(z_, dim=0)
+        xs = []
+
+        # Hard coded here, modify to your preferences
+        with torch.no_grad():
+            for i in range(0, x.size(0), 8):
