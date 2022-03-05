@@ -376,3 +376,10 @@ class Diffusion(object):
         # Hard coded here, modify to your preferences
         with torch.no_grad():
             for i in range(0, x.size(0), 8):
+                xs.append(self.sample_image(x[i : i + 8], model))
+        x = inverse_data_transform(config, torch.cat(xs, dim=0))
+        for i in range(x.size(0)):
+            tvu.save_image(x[i], os.path.join(self.args.image_folder, f"{i}.png"))
+
+    def sample_image(self, x, model, last=True):
+        try:
