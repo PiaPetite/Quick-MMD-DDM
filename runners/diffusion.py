@@ -391,4 +391,12 @@ class Diffusion(object):
             if self.args.skip_type == "uniform":
                 skip = self.num_timesteps // self.args.timesteps
                 seq = range(0, self.num_timesteps, skip)
-            elif self.
+            elif self.args.skip_type == "quad":
+                seq = (
+                    np.linspace(
+                        0, np.sqrt(self.num_timesteps * 0.8), self.args.timesteps
+                    )
+                    ** 2
+                )
+                seq = [int(s) for s in list(seq)]
+       
