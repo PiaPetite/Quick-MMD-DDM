@@ -383,3 +383,12 @@ class Diffusion(object):
 
     def sample_image(self, x, model, last=True):
         try:
+            skip = self.args.skip
+        except Exception:
+            skip = 1
+
+        if self.args.sample_type == "generalized":
+            if self.args.skip_type == "uniform":
+                skip = self.num_timesteps // self.args.timesteps
+                seq = range(0, self.num_timesteps, skip)
+            elif self.
