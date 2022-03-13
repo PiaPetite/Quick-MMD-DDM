@@ -407,4 +407,10 @@ class Diffusion(object):
            
             xs = generalized_steps(x, seq, model, self.betas, eta=self.args.eta)
             x = xs
-        elif self.args.samp
+        elif self.args.sample_type == "ddpm_noisy":
+            if self.args.skip_type == "uniform":
+                skip = self.num_timesteps // self.args.timesteps
+                seq = range(0, self.num_timesteps, skip)
+            elif self.args.skip_type == "quad":
+                seq = (
+                    np.lins
