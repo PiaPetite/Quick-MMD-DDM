@@ -399,4 +399,12 @@ class Diffusion(object):
                     ** 2
                 )
                 seq = [int(s) for s in list(seq)]
-       
+                
+            else:
+                raise NotImplementedError
+            from functions.denoising import generalized_steps
+            print(f"seq {seq}")
+           
+            xs = generalized_steps(x, seq, model, self.betas, eta=self.args.eta)
+            x = xs
+        elif self.args.samp
