@@ -413,4 +413,12 @@ class Diffusion(object):
                 seq = range(0, self.num_timesteps, skip)
             elif self.args.skip_type == "quad":
                 seq = (
-                    np.lins
+                    np.linspace(
+                        0, np.sqrt(self.num_timesteps * 0.8), self.args.timesteps
+                    )
+                    ** 2
+                )
+                seq = [int(s) for s in list(seq)]
+            else:
+                raise NotImplementedError
+            from functions.de
