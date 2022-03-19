@@ -421,4 +421,18 @@ class Diffusion(object):
                 seq = [int(s) for s in list(seq)]
             else:
                 raise NotImplementedError
-            from functions.de
+            from functions.denoising import ddpm_steps
+
+            x = ddpm_steps(x, seq, model, self.betas)
+        else:
+            raise NotImplementedError
+        if last:
+            x = x[0][-1]
+        return x
+
+
+    def sample_interpolation(self):
+        config = self.config
+
+        model = Model(self.config)
+        model.to(self.
