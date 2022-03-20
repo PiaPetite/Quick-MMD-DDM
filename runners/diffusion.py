@@ -435,4 +435,12 @@ class Diffusion(object):
         config = self.config
 
         model = Model(self.config)
-        model.to(self.
+        model.to(self.device)
+        model = torch.nn.DataParallel(model)
+        states = torch.load("./ckpt_400.pth")
+        model.load_state_dict(states[0])
+        
+        model.eval()
+
+        skip = self.num_timesteps // self.args.timesteps
+        timesteps = range(0, self.num_tim
