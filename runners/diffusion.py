@@ -464,4 +464,13 @@ class Diffusion(object):
         z2 = torch.randn(
             1,
             config.data.channels,
-            config.
+            config.data.image_size,
+            config.data.image_size,
+            device=self.device,
+        )
+        alpha = torch.arange(0.0, 1.01, 0.1).to(z1.device)
+        z_ = []
+        for i in range(alpha.size(0)):
+            z_.append(slerp(z1, z2, alpha[i]))
+
+        x = torch.cat(z
