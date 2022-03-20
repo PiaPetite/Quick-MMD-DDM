@@ -451,4 +451,17 @@ class Diffusion(object):
             theta = torch.acos(torch.sum(z1 * z2) / (torch.norm(z1) * torch.norm(z2)))
             return (
                 torch.sin((1 - alpha) * theta) / torch.sin(theta) * z1
-                + torch.sin(alpha * theta) 
+                + torch.sin(alpha * theta) / torch.sin(theta) * z2
+            )
+
+        z1 = torch.randn(
+            1,
+            config.data.channels,
+            config.data.image_size,
+            config.data.image_size,
+            device=self.device,
+        )
+        z2 = torch.randn(
+            1,
+            config.data.channels,
+            config.
