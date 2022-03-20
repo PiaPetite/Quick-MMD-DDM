@@ -443,4 +443,12 @@ class Diffusion(object):
         model.eval()
 
         skip = self.num_timesteps // self.args.timesteps
-        timesteps = range(0, self.num_tim
+        timesteps = range(0, self.num_timesteps, skip)
+        print(f"using timesteps {timesteps}")
+
+
+        def slerp(z1, z2, alpha):
+            theta = torch.acos(torch.sum(z1 * z2) / (torch.norm(z1) * torch.norm(z2)))
+            return (
+                torch.sin((1 - alpha) * theta) / torch.sin(theta) * z1
+                + torch.sin(alpha * theta) 
