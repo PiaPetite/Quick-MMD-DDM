@@ -480,4 +480,13 @@ class Diffusion(object):
         with torch.no_grad():
             for i in range(0, x.size(0), 8):
                 samples = generalized_steps(x[i:i+8], timesteps, model, self.betas, eta=self.args.eta)[0][-1]
-                xs.app
+                xs.append(samples)
+        x = inverse_data_transform(config, torch.cat(xs, dim=0))
+        for i in range(x.size(0)):
+            tvu.save_image(x[i], f"./sample_ddim_{i}.png")
+        
+    def generate_samples(self):
+
+        args, config = self.args, self.config
+        
+        mode
