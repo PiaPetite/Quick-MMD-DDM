@@ -473,4 +473,11 @@ class Diffusion(object):
         for i in range(alpha.size(0)):
             z_.append(slerp(z1, z2, alpha[i]))
 
-        x = torch.cat(z
+        x = torch.cat(z_, dim=0)
+        xs = []
+
+        # Hard coded here, modify to your preferences
+        with torch.no_grad():
+            for i in range(0, x.size(0), 8):
+                samples = generalized_steps(x[i:i+8], timesteps, model, self.betas, eta=self.args.eta)[0][-1]
+                xs.app
