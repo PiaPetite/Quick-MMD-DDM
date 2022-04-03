@@ -498,4 +498,10 @@ class Diffusion(object):
         model.eval()
 
         img_id = 0
-        print(f"starting from image {img_id}
+        print(f"starting from image {img_id}")
+        skip = self.num_timesteps // self.args.timesteps
+        timesteps = range(0, self.num_timesteps, skip)
+        print(f"using timesteps {timesteps}")
+        with torch.no_grad():
+            for k in tqdm.tqdm(
+                range(15), desc="Generating image samples for FID 
