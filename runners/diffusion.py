@@ -504,4 +504,14 @@ class Diffusion(object):
         print(f"using timesteps {timesteps}")
         with torch.no_grad():
             for k in tqdm.tqdm(
-                range(15), desc="Generating image samples for FID 
+                range(15), desc="Generating image samples for FID evaluation."
+            ):
+                n =25
+                e = torch.randn(
+                    n,
+                    config.data.channels,
+                    config.data.image_size,
+                    config.data.image_size,
+                    device=self.device,
+                )
+      
