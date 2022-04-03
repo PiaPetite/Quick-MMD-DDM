@@ -489,4 +489,13 @@ class Diffusion(object):
 
         args, config = self.args, self.config
         
-        mode
+        model = Model(self.config)
+        model.to(self.device)
+        model = torch.nn.DataParallel(model)
+        states = torch.load("./logs/church20_CLIP/ckpt_700.pth")
+        model.load_state_dict(states[0])
+        
+        model.eval()
+
+        img_id = 0
+        print(f"starting from image {img_id}
