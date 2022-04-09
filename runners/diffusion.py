@@ -520,4 +520,16 @@ class Diffusion(object):
                 samples = generalized_steps(e, timesteps, model, self.betas, eta=self.args.eta)[0][-1]
                 samples = inverse_data_transform(self.config, samples)
      
-                fo
+                for i in range(25):
+                    samples_list.append(samples[i].permute(1,2,0).cpu().detach().numpy())
+                generate_sample_sheet_8(samples_list, k, config.data.image_size)
+                
+
+    
+
+    def test_FID(self):
+
+
+        args, config = self.args, self.config
+        
+        model = Mod
