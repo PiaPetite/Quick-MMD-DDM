@@ -532,4 +532,14 @@ class Diffusion(object):
 
         args, config = self.args, self.config
         
-        model = Mod
+        model = Model(self.config)
+        model.to(self.device)
+        model = torch.nn.DataParallel(model)
+        states = torch.load("./church10/ckpt_450.pth")
+        model.load_state_dict(states[0])
+        
+        model.eval()
+
+        img_id = 0
+        print(f"starting from image {img_id}")
+        total_
