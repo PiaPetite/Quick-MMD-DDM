@@ -548,4 +548,12 @@ class Diffusion(object):
         timesteps = range(0, self.num_timesteps, skip)
         # seq = (
         #             np.linspace(
-        #                 0, np.sq
+        #                 0, np.sqrt(self.num_timesteps * 0.8), self.args.timesteps
+        #             )
+        #             ** 2
+        #         )
+        # timesteps = [int(s) for s in list(seq)]
+        all_samples = []
+        print(f"using timesteps {timesteps}")
+        with torch.no_grad():
+         
