@@ -542,4 +542,10 @@ class Diffusion(object):
 
         img_id = 0
         print(f"starting from image {img_id}")
-        total_
+        total_n_samples = 50000
+        n_rounds = (total_n_samples - img_id) // config.sampling.batch_size
+        skip = self.num_timesteps // self.args.timesteps
+        timesteps = range(0, self.num_timesteps, skip)
+        # seq = (
+        #             np.linspace(
+        #                 0, np.sq
