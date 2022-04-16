@@ -570,4 +570,17 @@ class Diffusion(object):
                 
                 #Sampling from the ddim model 
                 samples = generalized_steps(e, timesteps, model, self.betas, eta=self.args.eta)[0][-1]
-                samples = inverse_data_transfo
+                samples = inverse_data_transform(self.config, samples)
+
+                
+                for i in range(n):
+                    tvu.save_image(
+                        samples[i], "./church_test/{}.png".format(img_id)
+                    )
+                    img_id += 1
+        
+            print("Sampling complete")
+
+       
+ 
+
