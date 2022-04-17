@@ -584,3 +584,13 @@ class Diffusion(object):
        
  
 
+    def knn_features(self):
+
+
+        args, config = self.args, self.config
+        dataset, test_dataset = get_dataset(args, config)
+        train_loader = data.DataLoader(
+            dataset,
+            batch_size=512,
+            shuffle=True,
+            num_workers=config.data.num_workers,
