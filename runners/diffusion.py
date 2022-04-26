@@ -604,4 +604,12 @@ class Diffusion(object):
         
         model.eval()
 
-        # Load the feature extra
+        # Load the feature extractor
+        feature_extractor = CLIP_fx("ViT-B/32",self.device).to(self.device)
+        feature_extractor = torch.nn.DataParallel(feature_extractor)
+        feature_extractor.eval()
+
+        img_id = 0
+        print(f"starting from image {img_id}")
+        n_rounds = 1
+        skip = self.num_times
