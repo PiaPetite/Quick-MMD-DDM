@@ -594,3 +594,14 @@ class Diffusion(object):
             batch_size=512,
             shuffle=True,
             num_workers=config.data.num_workers,
+        )
+        
+        model = Model(self.config)
+        model.to(self.device)
+        model = torch.nn.DataParallel(model)
+        states = torch.load("./celeb5_CLIP_cub/ckpt_400.pth")
+        model.load_state_dict(states[0])
+        
+        model.eval()
+
+        # Load the feature extra
