@@ -612,4 +612,11 @@ class Diffusion(object):
         img_id = 0
         print(f"starting from image {img_id}")
         n_rounds = 1
-        skip = self.num_times
+        skip = self.num_timesteps // self.args.timesteps
+        timesteps = range(0, self.num_timesteps, skip)
+        
+        # cifar_10_data = []
+        # for i, (x, y) in enumerate(train_loader):
+        #     x = x.to(self.device)
+        #     x = feature_extractor(x)
+        #     cifar_10_data.append(x)
