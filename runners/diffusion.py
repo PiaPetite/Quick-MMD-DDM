@@ -620,3 +620,12 @@ class Diffusion(object):
         #     x = x.to(self.device)
         #     x = feature_extractor(x)
         #     cifar_10_data.append(x)
+        # cifar_10_data = torch.cat(cifar_10_data, dim=0).to(self.device)
+        # print(cifar_10_data.shape)
+
+        print(f"using timesteps {timesteps}")
+        with torch.no_grad():
+            for _ in range(n_rounds):
+                n = 20
+                e = torch.randn(
+          
