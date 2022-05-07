@@ -628,4 +628,11 @@ class Diffusion(object):
             for _ in range(n_rounds):
                 n = 20
                 e = torch.randn(
-          
+                    n,
+                    config.data.channels,
+                    config.data.image_size,
+                    config.data.image_size,
+                    device=self.device,
+                )
+                #Sampling from the ddim model 
+             
