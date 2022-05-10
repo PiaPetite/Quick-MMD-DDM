@@ -635,4 +635,11 @@ class Diffusion(object):
                     device=self.device,
                 )
                 #Sampling from the ddim model 
-             
+                samples = generalized_steps(e, timesteps, model, self.betas, eta=self.args.eta)[0][-1]
+                samples = inverse_data_transform(self.config, samples)
+                samples_feat = feature_extractor(samples)
+
+                distances_all = []
+                images_all = []
+  
+       
