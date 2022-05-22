@@ -642,4 +642,9 @@ class Diffusion(object):
                 distances_all = []
                 images_all = []
   
-       
+                # Iterate over all images in the dataset
+                for i in tqdm.tqdm(range(n)):
+                    # Calculate the distance between the generated sample and the dataset images in CLIP feature space
+                    distances = []
+                    images = []
+    
