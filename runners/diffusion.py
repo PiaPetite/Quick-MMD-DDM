@@ -647,4 +647,8 @@ class Diffusion(object):
                     # Calculate the distance between the generated sample and the dataset images in CLIP feature space
                     distances = []
                     images = []
-    
+                    for k, (x, y) in tqdm.tqdm(enumerate(train_loader)):
+                        x = x.to(self.device)
+                        feat_x = feature_extractor(x)
+                        dist = torch.nn.functional.pairwise_distance(samples_feat[i], feat_x)
+                        distances.append(
