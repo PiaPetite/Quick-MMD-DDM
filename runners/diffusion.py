@@ -651,4 +651,11 @@ class Diffusion(object):
                         x = x.to(self.device)
                         feat_x = feature_extractor(x)
                         dist = torch.nn.functional.pairwise_distance(samples_feat[i], feat_x)
-                        distances.append(
+                        distances.append(dist)
+                        images.append(x)
+                        
+                    
+                    distances = torch.cat(distances, dim=0)
+                    images = torch.cat(images, dim=0)
+                    
+                    dist, index = torch.topk(dist
