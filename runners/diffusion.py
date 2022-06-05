@@ -671,4 +671,19 @@ class Diffusion(object):
                         samples[i], "./DDIM/NN_vis/ddim_celeb/{}.png".format(img_id)
                     )
                     for j in range(5):
-                        tvu.sa
+                        tvu.save_image(
+                            images_all[i*5+j], "./DDIM/NN_vis/ddim_celeb/{}_{}.png".format(img_id,j)
+                        )
+                    img_id += 1
+
+                
+
+
+                
+
+                
+
+           
+    def compute_stats_lsun(self):
+
+        args, con
