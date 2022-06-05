@@ -686,4 +686,13 @@ class Diffusion(object):
            
     def compute_stats_lsun(self):
 
-        args, con
+        args, config = self.args, self.config
+
+        dataset, test_dataset = get_dataset(args, config)
+
+        #dataset_all = torch.utils.data.ConcatDataset([dataset, test_dataset])
+        train_loader = data.DataLoader(
+            dataset,
+            batch_size=500,
+            shuffle=True,
+  
