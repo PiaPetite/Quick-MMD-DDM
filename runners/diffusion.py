@@ -695,4 +695,12 @@ class Diffusion(object):
             dataset,
             batch_size=500,
             shuffle=True,
-  
+            num_workers=config.data.num_workers,
+        )
+
+        model = InceptionV3([InceptionV3.BLOCK_INDEX_BY_DIM[2048]]).to(self.device)
+        model = torch.nn.DataParallel(model)
+
+        print("Calculate FID stats..", end=" ", flush=True)
+        with torch.no_grad():
+            m
