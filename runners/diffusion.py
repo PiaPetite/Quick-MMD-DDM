@@ -658,4 +658,11 @@ class Diffusion(object):
                     distances = torch.cat(distances, dim=0)
                     images = torch.cat(images, dim=0)
                     
-                    dist, index = torch.topk(dist
+                    dist, index = torch.topk(distances, k=5, largest=False, sorted = True)
+                    
+
+                    top_images = torch.index_select(images, 0, index)
+                    images_all.append(top_images)
+                images_all = torch.cat(images_all, dim=0)
+
+                # Save the generated image an
