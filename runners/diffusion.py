@@ -665,4 +665,10 @@ class Diffusion(object):
                     images_all.append(top_images)
                 images_all = torch.cat(images_all, dim=0)
 
-                # Save the generated image an
+                # Save the generated image and the closest images from the dataset
+                for i in range(n):
+                    tvu.save_image(
+                        samples[i], "./DDIM/NN_vis/ddim_celeb/{}.png".format(img_id)
+                    )
+                    for j in range(5):
+                        tvu.sa
