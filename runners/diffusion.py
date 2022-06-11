@@ -703,4 +703,12 @@ class Diffusion(object):
 
         print("Calculate FID stats..", end=" ", flush=True)
         with torch.no_grad():
-            m
+            mu, sigma = calculate_activation_statistics_for_dataloader(model, train_loader, cuda=True, verbose=True)
+
+        np.savez_compressed("./DDIM/fid_utils/lsun_fid_statistics.npz", mu=mu, sigma=sigma)
+        print("Finished")
+
+    def train_cifar(self):
+        
+        degree = 3
+        use_checkpointing = Fal
