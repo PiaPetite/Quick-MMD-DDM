@@ -735,4 +735,11 @@ class Diffusion(object):
             model = Model_gradient_checkpointing(self.config)
         else:
             model = Model(self.config)
-        
+        ckpt = get_ckpt_path(f"ema_{name}")
+        print("Loading checkpoint {}".format(ckpt))
+        model.load_state_dict(torch.load(ckpt, map_location=self.device))
+        model.to(self.device)
+        model = torch.nn.DataParallel(model)
+        model.train()
+
+        # L
