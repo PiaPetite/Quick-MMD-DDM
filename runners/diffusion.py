@@ -742,4 +742,10 @@ class Diffusion(object):
         model = torch.nn.DataParallel(model)
         model.train()
 
-        # L
+        # Load the feature extractor
+        feature_extractor = InceptionV3().to(self.device)
+        feature_extractor = torch.nn.DataParallel(feature_extractor)
+        feature_extractor.eval()
+        
+        loss_kid = KID(degree = 3)
+        optimizer = get_optimizer(self.config, model.par
