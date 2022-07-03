@@ -748,4 +748,11 @@ class Diffusion(object):
         feature_extractor.eval()
         
         loss_kid = KID(degree = 3)
-        optimizer = get_optimizer(self.config, model.par
+        optimizer = get_optimizer(self.config, model.parameters())
+
+        start_epoch, step = 0, 0
+        rand = torch.randn(16, 3, config.data.image_size, config.data.image_size).to(self.device)
+        # cifar_10_data = []
+        # for i, (x, y) in enumerate(train_loader):
+        #         cifar_10_data.append(x)
+        # cifar_10_data = torch.ca
