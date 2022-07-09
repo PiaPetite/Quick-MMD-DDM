@@ -761,4 +761,12 @@ class Diffusion(object):
         timesteps = range(0, self.num_timesteps, skip)
         # seq = (
         #             np.linspace(
-        #                 0, np.sqrt(self.num_timesteps * 0.8), 
+        #                 0, np.sqrt(self.num_timesteps * 0.8), self.args.timesteps
+        #             )
+        #             ** 2
+        #         )
+        # timesteps = [int(s) for s in list(seq)]
+        print(f"Using timesteps: {timesteps}")
+        for epoch in range(start_epoch, config.training.n_epochs):
+            
+        
