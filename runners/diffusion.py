@@ -755,4 +755,10 @@ class Diffusion(object):
         # cifar_10_data = []
         # for i, (x, y) in enumerate(train_loader):
         #         cifar_10_data.append(x)
-        # cifar_10_data = torch.ca
+        # cifar_10_data = torch.cat(cifar_10_data, dim=0).to(self.device)
+        # print(cifar_10_data.shape)
+        skip = self.num_timesteps // self.args.timesteps
+        timesteps = range(0, self.num_timesteps, skip)
+        # seq = (
+        #             np.linspace(
+        #                 0, np.sqrt(self.num_timesteps * 0.8), 
