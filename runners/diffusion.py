@@ -783,4 +783,10 @@ class Diffusion(object):
                 #Sampling from the ddim model 
                 samples = generalized_steps_diff(e, timesteps, model, self.betas, eta=self.args.eta)[0][-1]
                 x=inverse_data_transform(self.config, x)
-                samples=inver
+                samples=inverse_data_transform(self.config, samples)
+
+                #Loss computation KID
+                samples_feat = feature_extractor(samples)[0].view(n, -1).type(torch.float64)
+                x_feat = feature_extractor(x)[0].view(n, -1).type(torch.float64)
+
+                loss =
