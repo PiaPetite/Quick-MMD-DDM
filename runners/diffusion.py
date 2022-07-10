@@ -769,4 +769,12 @@ class Diffusion(object):
         print(f"Using timesteps: {timesteps}")
         for epoch in range(start_epoch, config.training.n_epochs):
             
-        
+            data_start = time.time()
+            data_time = 0
+            for i, (x, y) in enumerate(train_loader):
+                n = x.size(0)
+                data_time += time.time() - data_start
+                step += 1
+
+                x = x.to(self.device)
+                x = data_transfo
