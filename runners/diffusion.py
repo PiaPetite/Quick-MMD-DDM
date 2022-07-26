@@ -797,4 +797,9 @@ class Diffusion(object):
                 )
 
                 
-   
+                loss.backward()
+                if step % self.config.training.validation_freq == 0 or step == 1:
+                    #plot_grad_flow(model.named_parameters(), step)
+                    with torch.no_grad():
+                        samples_list = []
+                     
