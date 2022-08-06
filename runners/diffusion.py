@@ -810,4 +810,13 @@ class Diffusion(object):
                       
                 torch.nn.utils.clip_grad_norm_(model.parameters(), 0.5)
                 if((i+1) % n_accumulation == 0 or i == len(train_loader)-1):
-                    optimiz
+                    optimizer.step()
+                    optimizer.zero_grad()
+
+                
+                if step % self.config.training.validation_freq == 0 or step == 1:
+                    states = [
+                        model.state_dict(),
+                        optimizer.state_dict(),
+                        epoch,
+           
