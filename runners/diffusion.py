@@ -819,4 +819,11 @@ class Diffusion(object):
                         model.state_dict(),
                         optimizer.state_dict(),
                         epoch,
-           
+                        step,
+                    ]
+                    
+                    torch.save(
+                        states,
+                        os.path.join(self.args.log_path, "ckpt_{}.pth".format(step)),
+                    )
+                    torch.save(states, os.path.join(self.args.
