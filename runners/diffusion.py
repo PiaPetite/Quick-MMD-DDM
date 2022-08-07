@@ -826,4 +826,14 @@ class Diffusion(object):
                         states,
                         os.path.join(self.args.log_path, "ckpt_{}.pth".format(step)),
                     )
-                    torch.save(states, os.path.join(self.args.
+                    torch.save(states, os.path.join(self.args.log_path, "ckpt.pth"))
+
+                data_start = time.time()
+  
+    def generate_reference(self):
+
+        args, config = self.args, self.config
+
+        dataset, test_dataset = get_dataset(args, config)
+
+        dataset_all = torch.utils.data.ConcatDataset([dataset, test_datas
