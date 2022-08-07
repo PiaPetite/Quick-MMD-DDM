@@ -836,4 +836,14 @@ class Diffusion(object):
 
         dataset, test_dataset = get_dataset(args, config)
 
-        dataset_all = torch.utils.data.ConcatDataset([dataset, test_datas
+        dataset_all = torch.utils.data.ConcatDataset([dataset, test_dataset])
+        train_loader = data.DataLoader(
+            dataset,
+            batch_size=9,
+            shuffle=True,
+            num_workers=config.data.num_workers,
+        )
+
+        for k, (x, y) in enumerate(train_loader):
+            samples = x.to(self.device)
+            sampl
