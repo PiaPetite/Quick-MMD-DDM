@@ -846,4 +846,13 @@ class Diffusion(object):
 
         for k, (x, y) in enumerate(train_loader):
             samples = x.to(self.device)
-            sampl
+            samples_list = []
+            for i in range(9):
+                samples_list.append(samples[i].permute(1,2,0).cpu().detach().numpy())
+            generate_sample_sheet_8(samples_list, k, config.data.image_size)
+            if(k==30):
+                break
+
+        return 
+
+    def train_ce
