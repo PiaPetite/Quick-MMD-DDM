@@ -880,4 +880,9 @@ class Diffusion(object):
         feature_extractor.eval()
         
         loss_kid = KID(degree = 3)
-        optimizer = ge
+        optimizer = get_optimizer(self.config, model.parameters())
+        start_epoch, step = 0, 0
+        rand = torch.randn(16, 3, config.data.image_size, config.data.image_size).to(self.device)
+        skip = self.num_timesteps // self.args.timesteps
+        timesteps = range(0, self.num_timesteps, skip)
+        p
