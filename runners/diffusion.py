@@ -892,4 +892,12 @@ class Diffusion(object):
             data_time = 0
             for i, (x, y) in enumerate(train_loader):
                 n = x.size(0)
-                data_time += time.ti
+                data_time += time.time() - data_start
+                step += 1
+
+                x = x.to(self.device)
+                x = data_transform(self.config, x)
+                e = torch.randn_like(x)
+                
+                #Sampling from the ddim model 
+                samples = generalized_steps_gp(e, timesteps, mode
