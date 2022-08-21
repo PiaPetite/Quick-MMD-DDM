@@ -906,4 +906,10 @@ class Diffusion(object):
                 samples=inverse_data_transform(self.config, samples)
 
                 #Loss computation KID
-                samples_feat = feature_extractor(sampl
+                samples_feat = feature_extractor(samples)[0].view(n, -1)
+                x_feat = feature_extractor(x)[0].view(n, -1)
+                loss = loss_kid(samples_feat, x_feat)/ n_accumulation
+
+                tb_logger.add_scalar("loss", loss, global_step=step)
+                logging.info(
+                    f"step: {ste
