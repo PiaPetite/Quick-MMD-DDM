@@ -912,4 +912,11 @@ class Diffusion(object):
 
                 tb_logger.add_scalar("loss", loss, global_step=step)
                 logging.info(
-                    f"step: {ste
+                    f"step: {step}, loss: {loss.item()}, data time: {data_time / (i+1)}"
+                )
+
+                loss.backward()
+                if step % self.config.training.validation_freq == 0 or step == 1:
+                    #plot_grad_flow(model.named_parameters(), i)
+                    with torch.no_grad():
+        
