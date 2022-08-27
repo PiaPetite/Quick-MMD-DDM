@@ -934,4 +934,12 @@ class Diffusion(object):
                 if step % self.config.training.validation_freq == 0 or step == 1:
                     states = [
                         model.state_dict(),
-           
+                        optimizer.state_dict(),
+                        epoch,
+                        step,
+                    ]
+                    
+                    torch.save(
+                        states,
+                        os.path.join(self.args.log_path, "ckpt_{}.pth".format(step)),
+     
