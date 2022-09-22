@@ -952,4 +952,14 @@ class Diffusion(object):
 
         args, config = self.args, self.config
         tb_logger = self.config.tb_logger
-        dataset, test_dataset = ge
+        dataset, test_dataset = get_dataset(args, config)
+        train_loader = data.DataLoader(
+            dataset,
+            batch_size=config.training.batch_size,
+            shuffle=True,
+            num_workers=config.data.num_workers,
+        )
+
+        n_accumulation = 4
+
+        # This used the pretrained DDPM model, see https://github.com/pe
