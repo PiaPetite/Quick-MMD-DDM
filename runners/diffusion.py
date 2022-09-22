@@ -962,4 +962,13 @@ class Diffusion(object):
 
         n_accumulation = 4
 
-        # This used the pretrained DDPM model, see https://github.com/pe
+        # This used the pretrained DDPM model, see https://github.com/pesser/pytorch_diffusion
+        if self.config.data.dataset == "CIFAR10":
+            name = "cifar10"
+        elif self.config.data.dataset == "LSUN":
+            name = f"lsun_{self.config.data.category}"
+        else:
+            raise ValueError
+
+
+        model = Model
