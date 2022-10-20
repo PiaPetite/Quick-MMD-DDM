@@ -977,4 +977,12 @@ class Diffusion(object):
         model.load_state_dict(torch.load(ckpt, map_location=self.device))
         model.to(self.device)
         model = torch.nn.DataParallel(model)
-        model.trai
+        model.train()
+
+        # Load the feature extractor
+        feature_extractor = InceptionV3().to(self.device)
+        feature_extractor = torch.nn.DataParallel(feature_extractor)
+        feature_extractor.eval()
+        
+        loss_kid = KID(degree=3)
+        optimizer = get_optimiz
