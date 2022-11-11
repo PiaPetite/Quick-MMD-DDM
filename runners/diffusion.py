@@ -1014,4 +1014,11 @@ class Diffusion(object):
                 samples_feat = feature_extractor(samples)[0].view(n, -1)
                 x_feat = feature_extractor(x)[0].view(n, -1)
 
-  
+                loss = loss_kid(samples_feat, x_feat) / n_accumulation
+
+                tb_logger.add_scalar("loss", loss, global_step=step)
+                logging.info(
+                    f"step: {step}, loss: {loss.item()}, data time: {data_time / (i+1)}"
+                )
+
+                los
