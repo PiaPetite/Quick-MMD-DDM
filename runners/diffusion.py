@@ -1025,4 +1025,8 @@ class Diffusion(object):
                 if step % self.config.training.validation_freq == 0 or step == 1:
                     with torch.no_grad():
                         samples_list = []
-                        sequence = generalized_steps_diff(rand, timesteps, model, self.betas, eta=self.args.eta)[0][
+                        sequence = generalized_steps_diff(rand, timesteps, model, self.betas, eta=self.args.eta)[0][-1]
+                        sequence = inverse_data_transform(self.config, sequence)
+                        for i in range(4):
+                            samples_list.append(sequence[i].permute(1,2,0).cpu().detach().numpy())
+                        generate_sample_sheet_4(samples_list, 
