@@ -1029,4 +1029,10 @@ class Diffusion(object):
                         sequence = inverse_data_transform(self.config, sequence)
                         for i in range(4):
                             samples_list.append(sequence[i].permute(1,2,0).cpu().detach().numpy())
-                        generate_sample_sheet_4(samples_list, 
+                        generate_sample_sheet_4(samples_list, step, config.data.image_size)
+                      
+                #if you want to clip the gradient
+                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+                if((i+1) % n_accumulation == 0 or i == len(train_loader)-1):
+                    optimizer.step()
+                    optimizer.z
