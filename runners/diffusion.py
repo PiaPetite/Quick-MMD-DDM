@@ -1051,4 +1051,16 @@ class Diffusion(object):
                     )
                     torch.save(states, os.path.join(self.args.log_path, "ckpt.pth"))
 
-                data_start = time
+                data_start = time.time()
+  
+
+    def train_cifar_CLIP(self):
+        
+        use_checkpointing = False
+        kernel = None
+        args, config = self.args, self.config
+        tb_logger = self.config.tb_logger
+        dataset, test_dataset = get_dataset(args, config)
+        train_loader = data.DataLoader(
+            dataset,
+            b
