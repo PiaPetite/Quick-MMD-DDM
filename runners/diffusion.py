@@ -1063,4 +1063,11 @@ class Diffusion(object):
         dataset, test_dataset = get_dataset(args, config)
         train_loader = data.DataLoader(
             dataset,
-            b
+            batch_size=config.training.batch_size,
+            shuffle=True,
+            num_workers=config.data.num_workers,
+        )
+
+        n_accumulation = 2
+        # This used the pretrained DDPM model, see https://github.com/pesser/pytorch_diffusion
+        if self.config.data.dataset == "CIFAR
