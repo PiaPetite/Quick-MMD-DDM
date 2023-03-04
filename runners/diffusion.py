@@ -1070,4 +1070,14 @@ class Diffusion(object):
 
         n_accumulation = 2
         # This used the pretrained DDPM model, see https://github.com/pesser/pytorch_diffusion
-        if self.config.data.dataset == "CIFAR
+        if self.config.data.dataset == "CIFAR10":
+            name = "cifar10"
+        elif self.config.data.dataset == "LSUN":
+            name = f"lsun_{self.config.data.category}"
+        else:
+            raise ValueError
+
+        if use_checkpointing:
+            model = Model_gradient_checkpointing(self.config)
+        else:
+            model = Model(s
