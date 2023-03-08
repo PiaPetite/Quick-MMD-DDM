@@ -1089,3 +1089,10 @@ class Diffusion(object):
         model.to(self.device)
         model = torch.nn.DataParallel(model)
         model.train()
+
+        # Load the feature extractor
+        feature_extractor = CLIP_fx("ViT-B/32",self.device).to(self.device)
+        feature_extractor = torch.nn.DataParallel(feature_extractor)
+        feature_extractor.eval()
+        if kernel == "rbf":
+            loss_kid = KI
