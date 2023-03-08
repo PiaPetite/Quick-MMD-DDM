@@ -1095,4 +1095,10 @@ class Diffusion(object):
         feature_extractor = torch.nn.DataParallel(feature_extractor)
         feature_extractor.eval()
         if kernel == "rbf":
-            loss_kid = KI
+            loss_kid = KID_rbf()
+        else:
+            loss_kid = KID(degree = 3)
+        optimizer = get_optimizer(self.config, model.parameters())
+        optimizer.zero_grad()
+        start_epoch, step = 0, 0
+        rand = torch.randn(16, 3, config.data.image_size, config.data.image_size).to(self.device)
