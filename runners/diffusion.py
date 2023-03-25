@@ -1109,4 +1109,13 @@ class Diffusion(object):
             
             data_start = time.time()
             data_time = 0
-            for i
+            for i, (x, y) in enumerate(train_loader):
+                n = x.size(0)
+                data_time += time.time() - data_start
+                step += 1
+
+                x = x.to(self.device)
+                x = data_transform(self.config, x)
+                e = torch.randn_like(x)
+
+                #Sampl
