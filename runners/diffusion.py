@@ -1118,4 +1118,9 @@ class Diffusion(object):
                 x = data_transform(self.config, x)
                 e = torch.randn_like(x)
 
-                #Sampl
+                #Sampling from the ddim model 
+                samples = generalized_steps_diff(e, timesteps, model, self.betas, eta=self.args.eta)[0][-1]
+                x=inverse_data_transform(self.config, x)
+                samples=inverse_data_transform(self.config, samples)
+
+                #Loss co
