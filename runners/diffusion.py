@@ -1123,4 +1123,11 @@ class Diffusion(object):
                 x=inverse_data_transform(self.config, x)
                 samples=inverse_data_transform(self.config, samples)
 
-                #Loss co
+                #Loss computation KID
+                samples_feat = feature_extractor(samples)#[0].view(n, -1)
+                x_feat = feature_extractor(x)#[0].view(n, -1)
+
+                samples_feat = samples_feat.type(torch.float32)
+                x_feat = x_feat.type(torch.float32)
+
+                #print(s
