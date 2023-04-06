@@ -1130,4 +1130,12 @@ class Diffusion(object):
                 samples_feat = samples_feat.type(torch.float32)
                 x_feat = x_feat.type(torch.float32)
 
-                #print(s
+                #print(samples_feat.mean(), x_feat.mean())
+                
+               # print(x_feat.shape)
+               # print(samples_feat.shape)
+
+                loss = loss_kid(samples_feat, x_feat)/n_accumulation
+
+                tb_logger.add_scalar("loss", loss, global_step=step)
+                logging.info(
