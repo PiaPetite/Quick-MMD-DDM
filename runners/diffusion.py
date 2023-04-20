@@ -1149,4 +1149,8 @@ class Diffusion(object):
                         samples_list = []
                         sequence = generalized_steps_diff(rand, timesteps, model, self.betas, eta=self.args.eta)[0][-1]
                         sequence = inverse_data_transform(self.config, sequence)
-                  
+                        for i in range(16):
+                            samples_list.append(sequence[i].permute(1,2,0).cpu().detach().numpy())
+                        generate_sample_sheet(samples_list, step, config.data.image_size)
+                      
+                torch.nn.utils.clip_grad_n
