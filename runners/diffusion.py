@@ -1185,4 +1185,15 @@ class Diffusion(object):
             dataset,
             batch_size=config.training.batch_size,
             shuffle=True,
-            num
+            num_workers=config.data.num_workers,
+        )
+        n_accumulation = 1
+        model = Model(self.config)
+       
+        model.load_state_dict(torch.load('./DDIM/ckpt_celebA.pth', map_location=self.device)[4])
+        model.to(self.device)
+        model = torch.nn.DataParallel(model)
+        model.train()
+
+
+        # Load 
