@@ -1169,4 +1169,13 @@ class Diffusion(object):
                     
                     torch.save(
                         states,
-     
+                        os.path.join(self.args.log_path, "ckpt_{}.pth".format(step)),
+                    )
+                    torch.save(states, os.path.join(self.args.log_path, "ckpt.pth"))
+
+                data_start = time.time()
+  
+
+    def train_celeba_CLIP(self):
+
+        args, config = 
