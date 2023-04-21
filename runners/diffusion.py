@@ -1178,4 +1178,11 @@ class Diffusion(object):
 
     def train_celeba_CLIP(self):
 
-        args, config = 
+        args, config = self.args, self.config
+        tb_logger = self.config.tb_logger
+        dataset, test_dataset = get_dataset(args, config)
+        train_loader = data.DataLoader(
+            dataset,
+            batch_size=config.training.batch_size,
+            shuffle=True,
+            num
