@@ -1196,4 +1196,11 @@ class Diffusion(object):
         model.train()
 
 
-        # Load 
+        # Load the feature extractor
+        feature_extractor = CLIP_fx("ViT-B/32",self.device).to(self.device)
+        feature_extractor = torch.nn.DataParallel(feature_extractor)
+        feature_extractor.eval()
+        
+        
+        loss_kid = KID(degree = 3)
+        optimizer = get_optimizer
