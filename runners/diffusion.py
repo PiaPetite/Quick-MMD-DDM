@@ -1240,4 +1240,10 @@ class Diffusion(object):
 
                 loss = loss_kid(samples_feat, x_feat)/ n_accumulation
 
-               
+                tb_logger.add_scalar("loss", loss, global_step=step)
+                logging.info(
+                    f"step: {step}, loss: {loss.item()}, data time: {data_time / (i+1)}"
+                )
+
+                loss.backward()
+                if step % self.config.training.validation_freq == 0 or st
