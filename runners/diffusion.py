@@ -1246,4 +1246,9 @@ class Diffusion(object):
                 )
 
                 loss.backward()
-                if step % self.config.training.validation_freq == 0 or st
+                if step % self.config.training.validation_freq == 0 or step == 1:
+                    #plot_grad_flow(model.named_parameters(), i)
+                    with torch.no_grad():
+                        samples_list = []
+                        sequence = generalized_steps_diff(rand, timesteps, model, self.betas, eta=self.args.eta)[0][-1]
+            
