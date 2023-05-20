@@ -1271,4 +1271,14 @@ class Diffusion(object):
                     
                     torch.save(
                         states,
-                        os.path.join(self.args.log
+                        os.path.join(self.args.log_path, "ckpt_{}.pth".format(step)),
+                    )
+                    torch.save(states, os.path.join(self.args.log_path, "ckpt.pth"))
+
+                data_start = time.time()
+
+
+    def train_lsun_CLIP(self):
+
+        args, config = self.args, self.config
+        tb_logger = self.config.tb
