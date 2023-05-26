@@ -1307,4 +1307,12 @@ class Diffusion(object):
         model.load_state_dict(torch.load(ckpt, map_location=self.device))
         model.to(self.device)
         model = torch.nn.DataParallel(model)
-     
+        model.train()
+
+        # Load the feature extractor
+        feature_extractor = CLIP_fx("ViT-B/32",self.device).to(self.device)
+        feature_extractor = torch.nn.DataParallel(feature_extractor)
+        feature_extractor.eval()
+        
+        loss_kid = KID(degree=3)
+        optimizer = get_o
