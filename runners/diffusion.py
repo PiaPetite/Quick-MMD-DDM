@@ -1364,4 +1364,9 @@ class Diffusion(object):
                     #     generate_sample_sheet_4(samples_list, step, config.data.image_size)
                       
                 #if you want to clip the gradient
-                torch.nn.utils.clip_grad_norm
+                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+                if((i+1) % n_accumulation == 0 or i == len(train_loader)-1):
+                    optimizer.step()
+                    optimizer.zero_grad()
+
+                if step % self.config.training.validation_freq == 0 or step ==
