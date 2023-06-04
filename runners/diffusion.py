@@ -1369,4 +1369,13 @@ class Diffusion(object):
                     optimizer.step()
                     optimizer.zero_grad()
 
-                if step % self.config.training.validation_freq == 0 or step ==
+                if step % self.config.training.validation_freq == 0 or step == 1:
+                    states = [
+                        model.state_dict(),
+                        optimizer.state_dict(),
+                        epoch,
+                        step,
+                    ]
+                    
+                    torch.save(
+                   
